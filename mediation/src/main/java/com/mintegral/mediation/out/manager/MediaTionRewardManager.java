@@ -2,8 +2,12 @@ package com.mintegral.mediation.out.manager;
 
 import android.app.Activity;
 import android.os.Handler;
+
+import android.os.Looper;
 import android.os.Message;
 
+import com.mintegral.mediation.common.LifecycleListener;
+import com.mintegral.mediation.common.MediationMTGErrorCode;
 import com.mintegral.mediation.common.adapter.BaseRewardAdapter;
 import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
@@ -30,10 +34,17 @@ public class MediaTionRewardManager {
     private WeakReference<Activity> activityWeakReference;
     private String mMediationUnitId;
     private AdSource currentAdSource;
-    private static Handler handler = new Handler(){
+    private boolean loadHadResult = false;
+    private  Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
+            switch (msg.what){
+                case 1:
+                    if (!loadHadResult) {
+                        loadTimeout();
+                    }
+                    break;
+            }
         }
     };
 
@@ -137,15 +148,20 @@ public class MediaTionRewardManager {
             rewardAdapter.setSDKRewardListener(new MediationAdapterRewardListener() {
                 @Override
                 public void loadSucceed() {
-                    if(mMediationAdapterRewardListener != null){
+                    if(handler != null){
+                        handler.removeMessages(1);
+                    }
+                    if(mMediationAdapterRewardListener != null && !loadHadResult){
                         mMediationAdapterRewardListener.loadSucceed();
+                        loadHadResult =true;
+
                     }
                 }
 
                 @Override
                 public void loadFailed(String msg) {
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
-                        rewardAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+                        loadAndSetTimeOut();
                     }else{
                         loadFailedToUser(msg);
                     }
@@ -193,30 +209,31 @@ public class MediaTionRewardManager {
 
     public void load(){
 
+        loadHadResult = false;
         if(activityWeakReference == null || activityWeakReference.get() == null){
-            loadFailedToUser("acticity is null");
+            loadFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(rewardAdapter != null ){
-            rewardAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            loadAndSetTimeOut();
         }else{
             if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
-                rewardAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+                loadAndSetTimeOut();
             }else{
-                loadFailedToUser("adsources is invalid");
+                loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
             }
         }
     }
 
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
-            showFailedToUser("acticity is null");
+            showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(rewardAdapter != null ){
             rewardAdapter.show();
         }else{
-            showFailedToUser("adapter is null");
+            showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
         }
     }
 
@@ -227,18 +244,21 @@ public class MediaTionRewardManager {
         }
         if(rewardAdapter != null ){
             return rewardAdapter.isReady();
-        }else{
-            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
-                return rewardAdapter.isReady();
-            }
         }
         return false;
     }
 
 
+    public LifecycleListener getLifecycleListener(){
+        if(rewardAdapter != null){
+            return rewardAdapter.getLifecycleListener();
+        }
+        return null;
+    }
     private void loadFailedToUser(String msg){
-        if(mMediationAdapterRewardListener != null){
+        if(mMediationAdapterRewardListener != null && !loadHadResult){
             mMediationAdapterRewardListener.loadFailed(msg);
+            loadHadResult =true;
         }
     }
 
@@ -248,5 +268,29 @@ public class MediaTionRewardManager {
         }
     }
 
+
+
+    private void loadTimeout(){
+        //清空上个adapter的监听
+        if(rewardAdapter != null){
+            rewardAdapter.setSDKRewardListener(null);
+        }
+
+        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+            loadAndSetTimeOut();
+        }else{
+            loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);
+        }
+
+    }
+
+    private void loadAndSetTimeOut(){
+        if (rewardAdapter != null) {
+            rewardAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            if (currentAdSource != null) {
+                handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
+            }
+        }
+    }
 
 }

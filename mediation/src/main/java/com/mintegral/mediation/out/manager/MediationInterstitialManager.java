@@ -2,11 +2,18 @@ package com.mintegral.mediation.out.manager;
 
 import android.app.Activity;
 
+import android.os.Handler;
+import android.os.Message;
+
+import com.mintegral.mediation.common.LifecycleListener;
+import com.mintegral.mediation.common.MediationMTGErrorCode;
 import com.mintegral.mediation.common.adapter.BaseInterstitialAdapter;
 import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
+
+import com.mintegral.mediation.out.interceptor.DefaultInterstitialInterceptor;
 import com.mintegral.mediation.out.interceptor.DefaultRewardInterceptor;
 
 import java.lang.ref.WeakReference;
@@ -17,7 +24,8 @@ import java.util.Map;
  * @author songjunjun
  */
 public class MediationInterstitialManager {
-    private BaseInterceptor mInterceptor = new DefaultRewardInterceptor();
+
+    private BaseInterceptor mInterceptor = new DefaultInterstitialInterceptor();
     private LinkedList<AdSource> adSources;
     private MediationAdapterInterstitialListener mMediationAdapterInterstitialListener;
     private MediationAdapterInitListener mMediationAdapterInitListener;
@@ -27,6 +35,20 @@ public class MediationInterstitialManager {
     private WeakReference<Activity> activityWeakReference;
     private String mMediationUnitId;
     private AdSource currentAdSource;
+
+    private boolean loadHadResult = false;
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    if (!loadHadResult) {
+                        loadTimeout();
+                    }
+                    break;
+            }
+        }
+    };
 
     public void init(Activity activity, String mediationUnitId, Map<String,Object> localParams){
         activityWeakReference = new WeakReference<Activity>(activity);
@@ -71,15 +93,21 @@ public class MediationInterstitialManager {
 
                 @Override
                 public void loadSucceed() {
-                    if(mMediationAdapterInterstitialListener != null){
+
+                    if(handler != null){
+                        handler.removeMessages(1);
+                    }
+                    if(mMediationAdapterInterstitialListener != null && !loadHadResult){
                         mMediationAdapterInterstitialListener.loadSucceed();
+                        loadHadResult = true;
                     }
                 }
 
                 @Override
                 public void loadFailed(String msg) {
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
-                        interstitialAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+
+                        loadAndSetTimeOut();
                     }else{
                         loadFailedToUser(msg);
                     }
@@ -169,37 +197,54 @@ public class MediationInterstitialManager {
 
     public void load(){
 
+        loadHadResult = false;
         if(activityWeakReference == null || activityWeakReference.get() == null){
-            loadFailedToUser("acticity is null");
+            loadFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(interstitialAdapter != null ){
-            interstitialAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            loadAndSetTimeOut();
         }else{
             if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
-                interstitialAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+                loadAndSetTimeOut();
             }else{
-                loadFailedToUser("adsources is invalid");
+                loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
             }
         }
+    }
+    public boolean isReady(){
+        if(activityWeakReference == null || activityWeakReference.get() == null){
+            return false;
+        }
+        if(interstitialAdapter != null ){
+            return interstitialAdapter.isReady();
+        }
+        return false;
     }
 
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
-            showFailedToUser("acticity is null");
+            showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
+
             return;
         }
         if(interstitialAdapter != null ){
             interstitialAdapter.show();
         }else{
-            showFailedToUser("adapter is null");
+            showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
         }
     }
 
-
+    public LifecycleListener getLifecycleListener(){
+        if(interstitialAdapter != null){
+            return interstitialAdapter.getLifecycleListener();
+        }
+        return null;
+    }
     private void loadFailedToUser(String msg){
-        if(mMediationAdapterInterstitialListener != null){
+        if(mMediationAdapterInterstitialListener != null && !loadHadResult){
             mMediationAdapterInterstitialListener.loadFailed(msg);
+            loadHadResult = true;
         }
     }
 
@@ -208,4 +253,29 @@ public class MediationInterstitialManager {
             mMediationAdapterInterstitialListener.showFailed(msg);
         }
     }
+
+
+    private void loadTimeout(){
+        //清空上个adapter的监听
+        if(interstitialAdapter != null){
+            interstitialAdapter.setSDKInterstitial(null);
+        }
+
+        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+            loadAndSetTimeOut();
+        }else{
+            loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);
+        }
+
+    }
+
+    private void loadAndSetTimeOut(){
+        if (interstitialAdapter != null) {
+            interstitialAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            if (currentAdSource != null) {
+                handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
+            }
+        }
+    }
+
 }

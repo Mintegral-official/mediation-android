@@ -44,6 +44,8 @@
             android:theme="@android:style/Theme.Translucent" />
         <!-- ironsource 需要的activity end -->
 
+        <activity android:name=".InterstitialActivity"></activity>
+
         <activity android:name=".RewardActivity"></activity>
     </application>
 

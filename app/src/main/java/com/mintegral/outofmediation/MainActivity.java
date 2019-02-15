@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private Button rewardBtn;
+
+    private Button rewardBtn,interstitialBtn;
 
 
     @Override
@@ -21,23 +22,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void initView(){
         rewardBtn = findViewById(R.id.main_reward);
+        interstitialBtn = findViewById(R.id.main_interstitial);
     }
 
     private void initListener(){
-        if(rewardBtn != null){
-            rewardBtn.setOnClickListener(this);
-        }
+        setViewListener(rewardBtn);
+        setViewListener(interstitialBtn);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_reward:
-                Intent intent = new Intent(MainActivity.this, RewardActivity.class);
-                startActivity(intent);
+
+                Intent rewardIntent = new Intent(MainActivity.this, RewardActivity.class);
+                startActivity(rewardIntent);
+                break;
+            case R.id.main_interstitial:
+                Intent interstitialIntent = new Intent(MainActivity.this, InterstitialActivity.class);
+                startActivity(interstitialIntent);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void setViewListener(View view){
+        if(view != null){
+            view.setOnClickListener(this);
         }
     }
 }

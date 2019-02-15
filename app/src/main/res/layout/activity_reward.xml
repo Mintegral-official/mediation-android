@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RewardActivity">
+
+    tools:context=".InterstitialActivity">
 
     <Button
         android:id="@+id/reward_load"

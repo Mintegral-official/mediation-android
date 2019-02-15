@@ -1,12 +1,16 @@
 package com.mintegral.mediation.adapter.iron;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.ironsource.mediationsdk.sdk.InterstitialListener;
+
+import com.mintegral.mediation.common.BaseLifecycleListener;
+import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
 import com.mintegral.mediation.common.adapter.BaseInterstitialAdapter;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
@@ -87,6 +91,11 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
 
     @Override
+    public boolean isReady() {
+        return IronSource.isISDemandOnlyInterstitialReady(mInstanceId);
+    }
+
+    @Override
     public void onInterstitialAdClicked(String instanceId) {
         if(mMediationAdapterInterstitialListener != null){
             mMediationAdapterInterstitialListener.clicked(instanceId);
@@ -135,6 +144,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     }
 
 
+
     private void sendToMediationShowFailed(String msg){
         if(mMediationAdapterInterstitialListener != null){
             mMediationAdapterInterstitialListener.showFailed(msg);
@@ -164,4 +174,24 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
                 return MediationMTGErrorCode.UNSPECIFIED;
         }
     }
+
+
+    @Override
+    public LifecycleListener getLifecycleListener() {
+        return mLifecycleListener;
+    }
+
+    private LifecycleListener mLifecycleListener = new BaseLifecycleListener() {
+        @Override
+        public void onPause(@NonNull Activity activity) {
+            super.onPause(activity);
+            IronSource.onPause(activity);
+        }
+
+        @Override
+        public void onResume(@NonNull Activity activity) {
+            super.onResume(activity);
+            IronSource.onResume(activity);
+        }
+    };
 }

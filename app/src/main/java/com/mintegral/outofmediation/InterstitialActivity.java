@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
@@ -17,11 +16,10 @@ import com.mintegral.mediation.out.manager.MediationInterstitialManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RewardActivity extends Activity implements View.OnClickListener {
+public class InterstitialActivity extends Activity implements View.OnClickListener {
 
     private Button showBtn,loadBtn,isReadyBtn;
-
-    private MediaTionRewardManager manager;
+    private MediationInterstitialManager manager;
     private LifecycleListener lifecycleListener;
 
     @Override
@@ -34,9 +32,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
     }
 
     private void initManager(){
-
-        manager = new MediaTionRewardManager();
-
+        manager = new MediationInterstitialManager();
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
             public void onInitSucceed() {
@@ -50,9 +46,8 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         });
         Map<String,Object> map = new HashMap<>();
         map.put("local","88f1a7f5");
-
-        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
-        manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
+        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
+        manager.setMediationAdapterInterstitialListenerr(new MediationAdapterInterstitialListener() {
             @Override
             public void loadSucceed() {
                 Log.e("----------","loadSucceed") ;
@@ -84,10 +79,6 @@ public class RewardActivity extends Activity implements View.OnClickListener {
             }
 
 
-            @Override
-            public void rewarded(String name, int amount) {
-
-            }
         });
         manager.init(this,"9999",map);
         lifecycleListener = manager.getLifecycleListener();
@@ -119,7 +110,6 @@ public class RewardActivity extends Activity implements View.OnClickListener {
                 manager.show();
                 break;
             case R.id.reward_is_ready:
-
                Log.e("----------","ready:"+manager.isReady()) ;
                 break;
             default:

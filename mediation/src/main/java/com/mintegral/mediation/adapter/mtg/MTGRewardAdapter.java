@@ -2,6 +2,8 @@ package com.mintegral.mediation.adapter.mtg;
 
 import android.app.Activity;
 
+
+import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.adapter.BaseRewardAdapter;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
@@ -38,5 +40,11 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     @Override
     public boolean isReady() {
         return false;
+    }
+
+
+    @Override
+    public LifecycleListener getLifecycleListener() {
+        return null;
     }
 }
