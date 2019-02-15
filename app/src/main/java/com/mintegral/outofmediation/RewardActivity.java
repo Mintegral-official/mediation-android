@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
@@ -49,9 +50,20 @@ public class RewardActivity extends Activity implements View.OnClickListener {
             }
         });
         Map<String,Object> map = new HashMap<>();
-        map.put("local","88f1a7f5");
+        //IronSource
+        //map.put("local","88f1a7f5");
+        //map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
 
-        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
+        //MTG
+        map.put("local","88f1a7f5");
+        map.put(CommonConst.KEY_APPID, "92762");
+        map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
+        map.put(CommonConst.KEY_USERID, "123");
+        map.put(CommonConst.KEY_REWARDID, "12817");
+        map.put(CommonConst.KEY_REWARDUNITID, "21310");
+        map.put(CommonConst.KEY_MUTE, false);
+        map.put("targetClass","com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
+
         manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
             @Override
             public void loadSucceed() {
