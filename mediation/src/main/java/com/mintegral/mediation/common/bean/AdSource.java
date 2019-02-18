@@ -1,10 +1,12 @@
 package com.mintegral.mediation.common.bean;
 
+import java.util.Map;
+
 public class AdSource {
     private long timeOut;
     private String targetClass;
-    private String localParams;
-    private String serviceParams;
+    private Map<String,Object>  localParams;
+    private Map<String,String> serviceParams;
 
     public long getTimeOut() {
         return timeOut;
@@ -22,19 +24,19 @@ public class AdSource {
         this.targetClass = targetClass;
     }
 
-    public String getLocalParams() {
+    public Map<String, Object> getLocalParams() {
         return localParams;
     }
 
-    public void setLocalParams(String localParams) {
+    public void setLocalParams(Map<String, Object> localParams) {
         this.localParams = localParams;
     }
 
-    public String getServiceParams() {
+    public Map<String, String> getServiceParams() {
         return serviceParams;
     }
 
-    public void setServiceParams(String serviceParams) {
+    public void setServiceParams(Map<String, String> serviceParams) {
         this.serviceParams = serviceParams;
     }
 }

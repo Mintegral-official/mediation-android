@@ -70,6 +70,12 @@ public class MediationRewardManager {
         if(mInterceptor != null){
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
+        if(adSources == null || adSources.size() == 0){
+            if(mMediationAdapterInitListener != null){
+                mMediationAdapterInitListener.onInitFailed();
+                return;
+            }
+        }
         rewardAdapter = loopNextAdapter(activity,mediationUnitId,localParams,null);
 
     }
@@ -110,7 +116,7 @@ public class MediationRewardManager {
                 currentAdSource = adSource;
                 rewardAdapter = newInstanceCurrentAdapter(adSource);
                 //初始化当前的adapter
-                initAdapter(activity,mediationUnitId,localParams,serviceParams,rewardAdapter);
+                initAdapter(activity,mediationUnitId,adSource.getLocalParams(),adSource.getServiceParams(),rewardAdapter);
                 //如果已经有adapter了，就跳出
                 if(rewardAdapter != null){
                     setAdapterRewardListener();

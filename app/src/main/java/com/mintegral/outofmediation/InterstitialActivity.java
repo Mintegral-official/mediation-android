@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.common.LifecycleListener;
+import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
 import com.mintegral.mediation.out.manager.MediationInterstitialManager;
@@ -43,16 +44,31 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
                 Log.e("00","onInitFailed");
             }
         });
-        Map<String,Object> map = new HashMap<>();
-        map.put("local","88f1a7f5");
-        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
+
+        Map<String,Object> paramsMap = new HashMap<>();
+        //IronSource
+        AdSource adSource = new AdSource();
+        Map<String,Object> ironsourceMap = new HashMap<>();
+        ironsourceMap.put("local","88f1a7f5");
+        adSource.setLocalParams(ironsourceMap);
+        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
+        adSource.setTimeOut(10000);
+        paramsMap.put("2",adSource);
+//        map.put("local","88f1a7f5");
+//        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
 
         //MTG
+        Map<String,Object> map = new HashMap<>();
+        AdSource mtgAdSource = new AdSource();
         map.put(CommonConst.KEY_APPID, "92762");
         map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
         map.put(CommonConst.KEY_INTERSTITIALUNITID, "35811");
         map.put(CommonConst.KEY_MUTE, false);
-        map.put("targetClass", "com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");
+        mtgAdSource.setLocalParams(map);
+        mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");
+        mtgAdSource.setTimeOut(10000);
+        paramsMap.put("1",mtgAdSource);
+
 
         manager.setMediationAdapterInterstitialListenerr(new MediationAdapterInterstitialListener() {
             @Override
@@ -87,7 +103,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
 
 
         });
-        manager.init(this,"9999",map);
+        manager.init(this,"9999",paramsMap);
         lifecycleListener = manager.getLifecycleListener();
     }
     private void initView(){
