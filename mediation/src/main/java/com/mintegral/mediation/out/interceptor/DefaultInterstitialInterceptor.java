@@ -16,7 +16,7 @@ public class DefaultInterstitialInterceptor extends BaseInterceptor {
             adSource.setLocalParams(localParams.get("local").toString());
             adSource.setServiceParams(serviceParams);
             adSource.setTargetClass(localParams.get("targetClass").toString());
-            adSource.setTimeOut(1000);
+            adSource.setTimeOut(30000);
             linkedList.add(adSource);
         }
        return linkedList;

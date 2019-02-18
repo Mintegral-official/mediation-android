@@ -50,7 +50,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
         mRewardUnitId = (String)localExtras.get(CommonConst.KEY_REWARDUNITID);
 
         if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(appKey) || TextUtils.isEmpty(mUserId) || TextUtils.isEmpty(mRewardId) || TextUtils.isEmpty(mRewardUnitId)) {
-            Log.e(TAG, "userId/rewarId/rewardUnitId cannot be null.");
+            Log.e(TAG, "appId/appKey/userId/rewarId/rewardUnitId cannot be null.");
             if (mMediationAdapterInitListener != null) {
                 mMediationAdapterInitListener.onInitFailed();
             }
@@ -103,9 +103,9 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
             return;
         }
 
+        mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
         mMTGRewardVideoHandler.load();
         mMTGRewardVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
-        mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
     }
 
     @Override
@@ -125,9 +125,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
         }
 
         @Override
-        public void onLoadSuccess(String s) {
-
-        }
+        public void onLoadSuccess(String s) {}
 
         @Override
         public void onVideoLoadFail(String s) {

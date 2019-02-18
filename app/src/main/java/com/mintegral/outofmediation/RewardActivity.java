@@ -51,11 +51,10 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         });
         Map<String,Object> map = new HashMap<>();
         //IronSource
-        //map.put("local","88f1a7f5");
-        //map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
+        map.put("local","88f1a7f5");
+        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
 
         //MTG
-        map.put("local","88f1a7f5");
         map.put(CommonConst.KEY_APPID, "92762");
         map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
         map.put(CommonConst.KEY_USERID, "123");

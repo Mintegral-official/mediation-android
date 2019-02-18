@@ -49,11 +49,12 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         map.put("local","88f1a7f5");
         map.put("targetClass","com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
 
-        /*map.put(CommonConst.KEY_APPID, "92762");
+        //MTG
+        map.put(CommonConst.KEY_APPID, "92762");
         map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
         map.put(CommonConst.KEY_INTERSTITIALUNITID, "35811");
         map.put(CommonConst.KEY_MUTE, false);
-        map.put("targetClass", "com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");*/
+        map.put("targetClass", "com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");
 
         manager.setMediationAdapterInterstitialListenerr(new MediationAdapterInterstitialListener() {
             @Override

@@ -17,7 +17,7 @@ public class DefaultRewardInterceptor extends BaseInterceptor {
             adSource.setServiceParams(serviceParams);
             adSource.setTargetClass(localParams.get("targetClass").toString());
 
-            adSource.setTimeOut(1);
+            adSource.setTimeOut(30000);
             linkedList.add(adSource);
         }
        return linkedList;

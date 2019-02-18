@@ -71,9 +71,9 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
             return;
         }
 
+        mMTGInterstitalVideoHandler.setInterstitialVideoListener(mInterstitialVideoListener);
         mMTGInterstitalVideoHandler.load();
         mMTGInterstitalVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
-        mMTGInterstitalVideoHandler.setInterstitialVideoListener(mInterstitialVideoListener);
     }
 
     @Override
@@ -148,8 +148,4 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
             mMediationAdapterInterstitialListener.clicked(s);
         }
     };
-
-    private synchronized void initMTGSDK(Activity activity, String appId, String appKey) {
-
-    }
 }
