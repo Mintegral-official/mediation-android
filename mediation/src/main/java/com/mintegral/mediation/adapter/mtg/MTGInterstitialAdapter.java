@@ -28,6 +28,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     private boolean isMute = false;
     private boolean isReady = false;
+    private long loadSucessTime;
     private String appId;
     private String appKey;
     private String mInterstitialUnitId;
@@ -85,8 +86,16 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public void show() {
-        if (mMTGInterstitalVideoHandler != null) {
+        if (isReady) {
+            //判断isReady状态，如果为true且ready的时间超过1小时，则置为false
+            long time = System.currentTimeMillis() - loadSucessTime;
+            isReady = time < 3600000 && isReady;
+        }
+
+        if (mMTGInterstitalVideoHandler != null && isReady) {
             mMTGInterstitalVideoHandler.show();
+        } else {
+            Log.e(TAG, "MTG InterstitalVideo not ready.");
         }
     }
 
@@ -127,6 +136,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
         @Override
         public void onVideoLoadSuccess(String s) {
+            loadSucessTime = System.currentTimeMillis();
             isReady = true;
         }
 
@@ -138,6 +148,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
         @Override
         public void onAdShow() {
+            isReady = false;
             mMediationAdapterInterstitialListener.showSucceed();
         }
 
