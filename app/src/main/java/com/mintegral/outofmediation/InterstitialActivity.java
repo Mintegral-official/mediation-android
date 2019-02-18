@@ -10,8 +10,6 @@ import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
-import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
-import com.mintegral.mediation.out.manager.MediaTionRewardManager;
 import com.mintegral.mediation.out.manager.MediationInterstitialManager;
 
 import java.util.HashMap;

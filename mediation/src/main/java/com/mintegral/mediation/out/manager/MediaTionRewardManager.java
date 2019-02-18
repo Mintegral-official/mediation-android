@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * @author songjunjun
  */
-public class MediaTionRewardManager {
+public class MediationRewardManager {
 
     private BaseInterceptor mInterceptor = new DefaultRewardInterceptor();
     private LinkedList<AdSource> adSources;
@@ -35,20 +35,28 @@ public class MediaTionRewardManager {
     private String mMediationUnitId;
     private AdSource currentAdSource;
     private boolean loadHadResult = false;
-    private  Handler handler = new Handler(){
+    private  Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
                     if (!loadHadResult) {
                         loadTimeout();
                     }
+                    break;
+                default:
                     break;
             }
         }
     };
 
 
+    /**
+     * 初始化sdk
+     * @param activity
+     * @param mediationUnitId
+     * @param localParams
+     */
     public void init(Activity activity, String mediationUnitId, Map<String,Object> localParams){
         activityWeakReference = new WeakReference<Activity>(activity);
         mMediationUnitId = mediationUnitId;
@@ -132,12 +140,20 @@ public class MediaTionRewardManager {
     }
 
 
+    /**
+     * 设置拦截器，如果不设置或设置为null，将使用默认
+     * @param interceptor
+     */
     public void setInterceptor(BaseInterceptor interceptor){
         if (interceptor != null) {
             mInterceptor = interceptor;
         }
     }
 
+    /**
+     * 设置激励视频的监听回调
+     * @param mediationAdapterRewardListener
+     */
     public void setMediationAdapterRewardListener(final MediationAdapterRewardListener mediationAdapterRewardListener){
         mMediationAdapterRewardListener = mediationAdapterRewardListener;
         setAdapterRewardListener();
@@ -203,10 +219,17 @@ public class MediaTionRewardManager {
         }
     }
 
+    /**
+     * 设置初始化的成功失败监听
+     * @param mediationAdapterInitListener
+     */
     public void setMediationAdapterInitListener(MediationAdapterInitListener mediationAdapterInitListener){
         mMediationAdapterInitListener = mediationAdapterInitListener;
     }
 
+    /**
+     * load方法，用于加载数据
+     */
     public void load(){
 
         loadHadResult = false;
@@ -225,6 +248,9 @@ public class MediaTionRewardManager {
         }
     }
 
+    /**
+     * 展示广告
+     */
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
@@ -238,6 +264,10 @@ public class MediaTionRewardManager {
     }
 
 
+    /**
+     * 是否满足展示条件
+     * @return
+     */
     public boolean isReady(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
@@ -249,6 +279,10 @@ public class MediaTionRewardManager {
     }
 
 
+    /**
+     * 获取生命周期监听，在对应的生命周期调用
+     * @return
+     */
     public LifecycleListener getLifecycleListener(){
         if(rewardAdapter != null){
             return rewardAdapter.getLifecycleListener();

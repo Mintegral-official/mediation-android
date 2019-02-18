@@ -50,6 +50,12 @@ public class MediationInterstitialManager {
         }
     };
 
+    /**
+     * 初始化sdk
+     * @param activity
+     * @param mediationUnitId
+     * @param localParams
+     */
     public void init(Activity activity, String mediationUnitId, Map<String,Object> localParams){
         activityWeakReference = new WeakReference<Activity>(activity);
         mMediationUnitId = mediationUnitId;
@@ -187,16 +193,27 @@ public class MediationInterstitialManager {
         return adapter;
     }
 
+    /**
+     * 设置初始化监听
+     * @param mediationAdapterInitListener
+     */
     public void setMediationAdapterInitListener(MediationAdapterInitListener mediationAdapterInitListener){
         mMediationAdapterInitListener = mediationAdapterInitListener;
     }
+
+    /**
+     * 设置Interstitial相关监听
+     * @param mediationAdapterInterstitialListenerr
+     */
     public void setMediationAdapterInterstitialListenerr(MediationAdapterInterstitialListener mediationAdapterInterstitialListenerr){
         mMediationAdapterInterstitialListener = mediationAdapterInterstitialListenerr;
         setAdapterInterstitial();
     }
 
+    /**
+     * 加载数据
+     */
     public void load(){
-
         loadHadResult = false;
         if(activityWeakReference == null || activityWeakReference.get() == null){
             loadFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
@@ -212,6 +229,11 @@ public class MediationInterstitialManager {
             }
         }
     }
+
+    /**
+     * 判断是否可以展示
+     * @return
+     */
     public boolean isReady(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
@@ -222,6 +244,9 @@ public class MediationInterstitialManager {
         return false;
     }
 
+    /**
+     * 展示广告
+     */
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
@@ -235,6 +260,10 @@ public class MediationInterstitialManager {
         }
     }
 
+    /**
+     * 获取activity的生命周期的监听
+     * @return
+     */
     public LifecycleListener getLifecycleListener(){
         if(interstitialAdapter != null){
             return interstitialAdapter.getLifecycleListener();
