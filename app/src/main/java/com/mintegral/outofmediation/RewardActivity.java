@@ -10,10 +10,8 @@ import android.widget.Button;
 import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
-import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
 import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
-import com.mintegral.mediation.out.manager.MediaTionRewardManager;
-import com.mintegral.mediation.out.manager.MediationInterstitialManager;
+import com.mintegral.mediation.out.manager.MediationRewardManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +20,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
 
     private Button showBtn,loadBtn,isReadyBtn;
 
-    private MediaTionRewardManager manager;
+    private MediationRewardManager manager;
     private LifecycleListener lifecycleListener;
 
     @Override
@@ -36,7 +34,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
 
     private void initManager(){
 
-        manager = new MediaTionRewardManager();
+        manager = new MediationRewardManager();
 
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
