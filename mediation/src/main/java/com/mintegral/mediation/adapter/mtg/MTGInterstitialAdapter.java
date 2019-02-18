@@ -27,6 +27,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     private static final String TAG = MTGInterstitialAdapter.class.getSimpleName();
 
     private boolean isMute = false;
+    private boolean isReady = false;
     private String appId;
     private String appKey;
     private String mInterstitialUnitId;
@@ -91,7 +92,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public boolean isReady() {
-        return false;
+        return isReady;
     }
 
     @Override
@@ -126,11 +127,12 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
         @Override
         public void onVideoLoadSuccess(String s) {
-
+            isReady = true;
         }
 
         @Override
         public void onVideoLoadFail(String s) {
+            isReady = false;
             mMediationAdapterInterstitialListener.loadFailed(s);
         }
 
