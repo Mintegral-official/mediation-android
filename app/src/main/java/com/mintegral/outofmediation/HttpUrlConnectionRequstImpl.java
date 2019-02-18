@@ -13,7 +13,7 @@ import java.util.HashMap;
  * 使用HttpUrlConnection
  */
 public class HttpUrlConnectionRequstImpl implements BaseRequest<String> {
-    private String baseUrl = "https://api.map.baidu.com/place/v2/search";
+    private String baseUrl = "";
     private HashMap<String, String> paramsMap;
 
     public HttpUrlConnectionRequstImpl(HashMap<String, String> params) {

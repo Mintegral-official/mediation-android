@@ -17,6 +17,12 @@ import com.mintegral.msdk.out.MIntegralSDKFactory;
 
 import java.util.Map;
 
+/**
+ * MTGInterstitialAdapter
+ * 适用于mtg Interstitial ad显示的adapter
+ *
+ * @author hanliontien
+ */
 public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     private static final String TAG = MTGInterstitialAdapter.class.getSimpleName();
 

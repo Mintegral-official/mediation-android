@@ -13,7 +13,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:enabled="true"
         android:theme="@style/AppTheme">
 
         <!-- ironsource 需要 -->
@@ -25,12 +24,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-            <intent-filter>
-                <data android:scheme="outofmed"/>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-
         </activity>
 
         <!-- ironsource 需要的activity start -->

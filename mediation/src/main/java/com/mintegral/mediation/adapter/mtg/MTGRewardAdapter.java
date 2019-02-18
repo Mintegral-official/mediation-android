@@ -18,6 +18,12 @@ import com.mintegral.msdk.out.RewardVideoListener;
 
 import java.util.Map;
 
+/**
+ * MTGRewardAdapter
+ * 适用于mtg reward ad显示的adapter
+ *
+ * @author hanliontien
+ */
 public class MTGRewardAdapter extends BaseRewardAdapter {
     private static final String TAG = MTGRewardAdapter.class.getSimpleName();
 
