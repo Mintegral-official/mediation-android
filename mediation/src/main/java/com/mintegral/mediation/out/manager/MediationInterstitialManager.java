@@ -69,6 +69,12 @@ public class MediationInterstitialManager {
         if(mInterceptor != null){
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
+        if(adSources == null || adSources.size() == 0){
+            if(mMediationAdapterInitListener != null){
+                mMediationAdapterInitListener.onInitFailed();
+                return;
+            }
+        }
         interstitialAdapter = loopNextAdapter(activity,mediationUnitId,localParams,null);
 
     }
@@ -81,7 +87,7 @@ public class MediationInterstitialManager {
                 currentAdSource = adSource;
                 interstitialAdapter = newInstanceCurrentAdapter(adSource);
                 //初始化当前的adapter
-                initAdapter(activity,mediationUnitId,localParams,serviceParams,interstitialAdapter);
+                initAdapter(activity,mediationUnitId,adSource.getLocalParams(),adSource.getServiceParams(),interstitialAdapter);
                 //如果已经有adapter了，就跳出
                 if(interstitialAdapter != null){
                     setAdapterInterstitial();

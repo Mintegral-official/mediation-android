@@ -12,13 +12,14 @@ public class DefaultRewardInterceptor extends BaseInterceptor {
    public LinkedList<AdSource> onInterceptor(String unitId, Map<String,Object> localParams, String serviceParams){
         LinkedList<AdSource> linkedList = new LinkedList<>();
         if(localParams != null){
-            AdSource adSource = new AdSource();
-            adSource.setLocalParams(localParams.get("local").toString());
-            adSource.setServiceParams(serviceParams);
-            adSource.setTargetClass(localParams.get("targetClass").toString());
-
-            adSource.setTimeOut(30000);
-            linkedList.add(adSource);
+            Object o = localParams.get("1");
+            if(o instanceof AdSource){
+                linkedList.add((AdSource) o);
+            }
+            Object o1 = localParams.get("2");
+            if(o1 instanceof AdSource){
+                linkedList.add((AdSource) o1);
+            }
         }
        return linkedList;
    }
