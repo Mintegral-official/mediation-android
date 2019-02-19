@@ -73,6 +73,7 @@ public class MediationRewardManager {
         if(adSources == null || adSources.size() == 0){
             if(mMediationAdapterInitListener != null){
                 mMediationAdapterInitListener.onInitFailed();
+                mMediationAdapterInitListener = null;
                 return;
             }
         }
@@ -88,6 +89,7 @@ public class MediationRewardManager {
                 public void onInitSucceed() {
                     if(mMediationAdapterInitListener != null){
                         mMediationAdapterInitListener.onInitSucceed();
+                        mMediationAdapterInitListener = null;
                     }
                 }
 
@@ -96,6 +98,7 @@ public class MediationRewardManager {
                     if( loopNextAdapter(activity,mediationUnitId,localParams,serviceParams) == null){
                         if(mMediationAdapterInitListener != null){
                             mMediationAdapterInitListener.onInitFailed();
+                            mMediationAdapterInitListener = null;
                         }
                     }
                 }
@@ -104,6 +107,7 @@ public class MediationRewardManager {
         }else{
             if(mMediationAdapterInitListener != null){
                 mMediationAdapterInitListener.onInitFailed();
+                mMediationAdapterInitListener = null;
             }
         }
     }
@@ -326,7 +330,7 @@ public class MediationRewardManager {
 
     private void loadAndSetTimeOut(){
         if (rewardAdapter != null) {
-            rewardAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            rewardAdapter.load();
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
             }

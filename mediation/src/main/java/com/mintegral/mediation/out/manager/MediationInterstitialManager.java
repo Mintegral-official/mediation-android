@@ -306,7 +306,7 @@ public class MediationInterstitialManager {
 
     private void loadAndSetTimeOut(){
         if (interstitialAdapter != null) {
-            interstitialAdapter.load(activityWeakReference.get(),mLocalParams,mServiceParams);
+            interstitialAdapter.load();
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
             }

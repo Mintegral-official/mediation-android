@@ -103,7 +103,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
+    public void load() {
         if (mMediationAdapterRewardListener == null) {
             Log.e(TAG, "MediationAdapterRewardListener cannot be null. Please call setSDKRewardListener() first.");
             return;

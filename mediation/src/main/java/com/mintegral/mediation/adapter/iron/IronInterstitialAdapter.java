@@ -61,7 +61,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     }
 
     @Override
-    public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
+    public void load() {
         if (IronSource.isISDemandOnlyInterstitialReady(mInstanceId)) {
             onInterstitialAdReady(mInstanceId);
         } else {

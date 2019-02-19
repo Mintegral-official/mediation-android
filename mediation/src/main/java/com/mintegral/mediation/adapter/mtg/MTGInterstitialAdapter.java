@@ -72,7 +72,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     }
 
     @Override
-    public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
+    public void load() {
         if (mMediationAdapterInterstitialListener == null) {
             Log.e(TAG, "MediationAdapterInterstitialListener cannot be null. Please call setSDKInterstitial() first.");
             return;

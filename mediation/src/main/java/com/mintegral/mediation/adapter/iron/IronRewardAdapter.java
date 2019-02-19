@@ -156,7 +156,7 @@ public class IronRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
+    public void load() {
         if (!mIsFirstInitFlow) {
             if (mMediationAdapterRewardListener != null) {
                 if (isReady()) {

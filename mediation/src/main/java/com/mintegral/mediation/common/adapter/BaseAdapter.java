@@ -18,11 +18,8 @@ public abstract class BaseAdapter {
 
     /**
      * 请求广告
-     * @param activity 方便给sdk传入context
-     * @param localExtras 外部应用传进来的参数
-     * @param serverExtras 从服务端获取的参数
      */
-    public abstract void load(Activity activity,Map<String, Object> localExtras, Map<String, String> serverExtras);
+    public abstract void load();
 
     /**
      * 展示广告

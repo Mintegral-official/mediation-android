@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.common.LifecycleListener;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class InterstitialActivity extends Activity implements View.OnClickListener {
 
-    private Button showBtn,loadBtn,isReadyBtn;
+    private Button showBtn,loadBtn,isReadyBtn,initBtn;
     private MediationInterstitialManager manager;
     private LifecycleListener lifecycleListener;
 
@@ -28,7 +29,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         setContentView(R.layout.activity_reward);
         initView();
         initListener();
-        initManager();
+
     }
 
     private void initManager(){
@@ -36,12 +37,14 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
             public void onInitSucceed() {
-                Log.e("00","onInitSucceed");
+                Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
+                Log.e("interstitial","onInitSucceed");
             }
 
             @Override
             public void onInitFailed() {
-                Log.e("00","onInitFailed");
+                Toast.makeText(InterstitialActivity.this,"onInitFailed",Toast.LENGTH_LONG).show();
+                Log.e("interstitial","onInitFailed");
             }
         });
 
@@ -73,45 +76,46 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         manager.setMediationAdapterInterstitialListenerr(new MediationAdapterInterstitialListener() {
             @Override
             public void loadSucceed() {
-                Log.e("----------","loadSucceed") ;
+                Toast.makeText(InterstitialActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void loadFailed(String msg) {
-                Log.e("----------","loadFailed:"+msg) ;
+                Toast.makeText(InterstitialActivity.this,"loadFailed:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void showSucceed() {
-                Log.e("----------","showSucceed:") ;
+                Toast.makeText(InterstitialActivity.this,"showSucceed:",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void showFailed(String msg) {
-                Log.e("----------","showFailed:"+msg) ;
+                Toast.makeText(InterstitialActivity.this,"showFailed:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void clicked(String msg) {
-                Log.e("----------","clicked:"+msg) ;
+                Toast.makeText(InterstitialActivity.this,"clicked:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void closed() {
-                Log.e("----------","closed:") ;
+                Toast.makeText(InterstitialActivity.this,"closed:",Toast.LENGTH_LONG).show();
             }
-
 
         });
         manager.init(this,"9999",paramsMap);
         lifecycleListener = manager.getLifecycleListener();
     }
     private void initView(){
+        initBtn = findViewById(R.id.reward_init);
         showBtn = findViewById(R.id.reward_show);
         loadBtn = findViewById(R.id.reward_load);
         isReadyBtn = findViewById(R.id.reward_is_ready);
     }
     private void initListener(){
+        setViewListener(initBtn);
         setViewListener(showBtn);
         setViewListener(loadBtn);
         setViewListener(isReadyBtn);
@@ -126,6 +130,8 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.reward_init:
+                initManager();
             case R.id.reward_load:
                 manager.load();
                 break;
@@ -133,7 +139,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
                 manager.show();
                 break;
             case R.id.reward_is_ready:
-               Log.e("----------","ready:"+manager.isReady()) ;
+                Toast.makeText(InterstitialActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
                 break;
             default:
         }

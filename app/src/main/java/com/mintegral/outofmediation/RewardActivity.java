@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.mintegral.mediation.common.CommonConst;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 public class RewardActivity extends Activity implements View.OnClickListener {
 
-    private Button showBtn,loadBtn,isReadyBtn;
+    private Button showBtn,loadBtn,isReadyBtn,initBtn;
 
     private MediationRewardManager manager;
     private LifecycleListener lifecycleListener;
@@ -30,7 +31,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_reward);
         initView();
         initListener();
-        initManager();
+
     }
 
     private void initManager(){
@@ -40,17 +41,19 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
             public void onInitSucceed() {
-                Log.e("00","onInitSucceed");
+                Toast.makeText(RewardActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
+                Log.e("reward","onInitSucceed");
             }
 
             @Override
             public void onInitFailed() {
-                Log.e("00","onInitFailed");
+                Toast.makeText(RewardActivity.this,"onInitFailed",Toast.LENGTH_LONG).show();
+                Log.e("reward","onInitFailed");
             }
         });
         Map<String,Object> paramsMap = new HashMap<>();
         //IronSource
-        AdSource adSource = new AdSource();
+        final AdSource adSource = new AdSource();
         Map<String,Object> ironsourceMap = new HashMap<>();
         ironsourceMap.put("local","88f1a7f5");
         adSource.setLocalParams(ironsourceMap);
@@ -77,38 +80,38 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
             @Override
             public void loadSucceed() {
-                Log.e("----------","loadSucceed") ;
+                Toast.makeText(RewardActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void loadFailed(String msg) {
-                Log.e("----------","loadFailed:"+msg) ;
+                Toast.makeText(RewardActivity.this,"loadFailed:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void showSucceed() {
-                Log.e("----------","showSucceed:") ;
+                Toast.makeText(RewardActivity.this,"showSucceed:",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void showFailed(String msg) {
-                Log.e("----------","showFailed:"+msg) ;
+                Toast.makeText(RewardActivity.this,"showFailed:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void clicked(String msg) {
-                Log.e("----------","clicked:"+msg) ;
+                Toast.makeText(RewardActivity.this,"clicked:"+msg,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void closed() {
-                Log.e("----------","closed:") ;
+                Toast.makeText(RewardActivity.this,"closed:",Toast.LENGTH_LONG).show();
             }
 
 
             @Override
             public void rewarded(String name, int amount) {
-
+                Toast.makeText(RewardActivity.this,"rewarded:"+name+"-amount:"+amount,Toast.LENGTH_LONG).show();
             }
         });
         manager.init(this,"9999",paramsMap);
@@ -118,11 +121,13 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         showBtn = findViewById(R.id.reward_show);
         loadBtn = findViewById(R.id.reward_load);
         isReadyBtn = findViewById(R.id.reward_is_ready);
+        initBtn = findViewById(R.id.reward_init);
     }
     private void initListener(){
         setViewListener(showBtn);
         setViewListener(loadBtn);
         setViewListener(isReadyBtn);
+        setViewListener(initBtn);
     }
 
     private void setViewListener(View view){
@@ -134,6 +139,9 @@ public class RewardActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.reward_init:
+                initManager();
+                break;
             case R.id.reward_load:
                 manager.load();
                 break;
@@ -141,8 +149,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
                 manager.show();
                 break;
             case R.id.reward_is_ready:
-
-               Log.e("----------","ready:"+manager.isReady()) ;
+                Toast.makeText(RewardActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
                 break;
             default:
         }
