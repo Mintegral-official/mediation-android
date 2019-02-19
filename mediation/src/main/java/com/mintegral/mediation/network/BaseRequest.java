@@ -1,14 +1,14 @@
 package com.mintegral.mediation.network;
 
 /**
- * Reqest接口
+ * Reqest interface
  *
  * @author hanliontien
  */
 public interface BaseRequest<T> {
     /**
-     * 网络请求方法
-     * 需自行实现，如HttpUrlConnection或者Okhttp
+     * Network Request Method
+     * u need to implement it, such as HttpUrlConnection or Okhttp.
      * @return
      */
     T request() throws Exception;

@@ -37,7 +37,6 @@ dependencies {
     implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar'
 
     //MTG NEED
-    implementation 'com.facebook.android:audience-network-sdk:4.26.0'
     implementation ('com.google.android.gms:play-services-ads:10.0.1'){
         exclude group: 'com.android.support', module: 'support-v4'
     }

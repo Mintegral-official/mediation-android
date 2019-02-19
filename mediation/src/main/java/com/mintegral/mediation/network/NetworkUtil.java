@@ -1,23 +1,26 @@
 package com.mintegral.mediation.network;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.app.Activity;
+
+import com.mintegral.mediation.common.CommonConst;
 
 import java.lang.ref.WeakReference;
 
 /**
- * 网络请求实现
+ * Network request/response util
  * @see AsyncTask
  *
  * @author hanliontien
  */
 public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
-    private WeakReference<Activity> mActivitys;
+    private WeakReference<Context> mContexts;
     private NetCallback mNetCallback;
 
-    public NetworkUtil(Activity activity, NetCallback netCallback) {
+    public NetworkUtil(Context context, NetCallback netCallback) {
         this.mNetCallback = netCallback;
-        this.mActivitys = new WeakReference<>(activity);
+        this.mContexts = new WeakReference<>(context);
     }
 
     @Override
@@ -31,6 +34,9 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
     @Override
     protected T doInBackground(BaseRequest<T>... requests) {
         if (isCancelled() || requests == null || requests.length == 0) {
+            if(mNetCallback != null) {
+                mNetCallback.onFail(new NetworkException(CommonConst.KEY_REQUESTERROR, CommonConst.REQUESTERROR_CONTENT));
+            }
             return null;
         }
 
@@ -50,12 +56,29 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
     protected void onPostExecute(T response) {
         super.onPostExecute(response);
 
-        if (mActivitys.get() != null && !mActivitys.get().isFinishing()) {
-            if(mNetCallback != null) {
-                mNetCallback.onSuccess(response);
+        if (mContexts.get() != null) {
+            if (mContexts.get() instanceof Activity) {
+                Activity activity = (Activity) mContexts.get();
+                if (activity.isFinishing()) {
+                    cancel(true);
+                } else {
+                    post(response);
+                }
+            } else {
+                post(response);
             }
         } else {
             cancel(true);
+        }
+    }
+
+    private void post(T response) {
+        if(mNetCallback != null) {
+            if (response != null) {
+                mNetCallback.onSuccess(response);
+            } else {
+                mNetCallback.onFail(new NetworkException(CommonConst.KEY_RESPONSEERROR, CommonConst.RESPONSEERROR_CONTENT));
+            }
         }
     }
 }

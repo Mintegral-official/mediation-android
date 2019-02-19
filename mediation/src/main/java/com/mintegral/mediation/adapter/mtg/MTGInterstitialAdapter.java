@@ -19,7 +19,8 @@ import java.util.Map;
 
 /**
  * MTGInterstitialAdapter
- * 适用于mtg Interstitial ad显示的adapter
+ *
+ * Adapter for Mintegral Interstitial Video ad.
  *
  * @author hanliontien
  */
@@ -40,11 +41,17 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     public void init(Activity activity, String mediationUnitId, Map<String, Object> localExtras, Map<String, String> serverExtras) {
         if (activity == null || activity.isFinishing()) {
             Log.e(TAG, "Activity is null or finishing.");
+            if (mMediationAdapterInitListener != null) {
+                mMediationAdapterInitListener.onInitFailed();
+            }
             return;
         }
 
         if (localExtras == null || localExtras.isEmpty()) {
             Log.e(TAG, "Local parameters cannot be null.");
+            if (mMediationAdapterInitListener != null) {
+                mMediationAdapterInitListener.onInitFailed();
+            }
             return;
         }
 
@@ -61,7 +68,6 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
             return;
         }
 
-        MIntegralConstans.DEBUG = true;
         MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
         Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey);
         sdk.init(map, activity.getApplication());
@@ -74,11 +80,6 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public void load() {
-        if (mMediationAdapterInterstitialListener == null) {
-            Log.e(TAG, "MediationAdapterInterstitialListener cannot be null. Please call setSDKInterstitial() first.");
-            return;
-        }
-
         mMTGInterstitalVideoHandler.setInterstitialVideoListener(mInterstitialVideoListener);
         mMTGInterstitalVideoHandler.load();
         mMTGInterstitalVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
@@ -96,11 +97,18 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
             mMTGInterstitalVideoHandler.show();
         } else {
             Log.e(TAG, "MTG InterstitalVideo not ready.");
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.loadFailed("MTG InterstitalVideo not ready.");
+            }
         }
     }
 
     @Override
     public boolean isReady() {
+        if (isReady) {
+            long time = System.currentTimeMillis() - loadSucessTime;
+            isReady = time < 3600000 && isReady;
+        }
         return isReady;
     }
 

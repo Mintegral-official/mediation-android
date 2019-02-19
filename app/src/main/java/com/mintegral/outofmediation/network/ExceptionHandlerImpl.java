@@ -1,7 +1,8 @@
 package com.mintegral.outofmediation.network;
 
-import android.app.Activity;
+import android.content.Context;
 
+import com.mintegral.mediation.common.CommonConst;
 import com.mintegral.mediation.network.IExceptionHandler;
 import com.mintegral.mediation.network.NetworkException;
 
@@ -10,7 +11,7 @@ import com.mintegral.mediation.network.NetworkException;
  */
 public class ExceptionHandlerImpl implements IExceptionHandler {
     @Override
-    public void handleException(Activity activity, Throwable t) {
+    public void handleException(Context context, Throwable t) {
         if (t instanceof NetworkException){
             NetworkException networkException = (NetworkException) t;
             switch (networkException.errorCode) {
@@ -18,6 +19,12 @@ public class ExceptionHandlerImpl implements IExceptionHandler {
                     break;
 
                 case 401:
+                    break;
+
+                case CommonConst.KEY_REQUESTERROR:
+                    break;
+
+                case CommonConst.KEY_RESPONSEERROR:
                     break;
             }
         }

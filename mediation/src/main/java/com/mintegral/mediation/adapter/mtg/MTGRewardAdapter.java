@@ -20,7 +20,8 @@ import java.util.Map;
 
 /**
  * MTGRewardAdapter
- * 适用于mtg reward ad显示的adapter
+ *
+ * Adapter for Mintegral rewardvideo ad.
  *
  * @author hanliontien
  */
@@ -41,11 +42,17 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     public void init(Activity activity, String mediationUnitId, Map<String, Object> localExtras, Map<String, String> serverExtras) {
         if (activity == null || activity.isFinishing()) {
             Log.e(TAG, "Activity is null or finishing.");
+            if (mMediationAdapterInitListener != null) {
+                mMediationAdapterInitListener.onInitFailed();
+            }
             return;
         }
 
         if (localExtras == null || localExtras.isEmpty()) {
             Log.e(TAG, "Local parameters cannot be null.");
+            if (mMediationAdapterInitListener != null) {
+                mMediationAdapterInitListener.onInitFailed();
+            }
             return;
         }
 
@@ -55,15 +62,14 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
         mRewardId = (String) localExtras.get(CommonConst.KEY_REWARDID);
         mRewardUnitId = (String)localExtras.get(CommonConst.KEY_REWARDUNITID);
 
-        if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(appKey) || TextUtils.isEmpty(mUserId) || TextUtils.isEmpty(mRewardId) || TextUtils.isEmpty(mRewardUnitId)) {
-            Log.e(TAG, "appId/appKey/userId/rewarId/rewardUnitId cannot be null.");
+        if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(appKey) || TextUtils.isEmpty(mRewardId) || TextUtils.isEmpty(mRewardUnitId)) {
+            Log.e(TAG, "appId/appKey/rewarId/rewardUnitId cannot be null.");
             if (mMediationAdapterInitListener != null) {
                 mMediationAdapterInitListener.onInitFailed();
             }
             return;
         }
 
-        MIntegralConstans.DEBUG = true;
         MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
         Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey);
         sdk.init(map, activity.getApplication());
@@ -96,19 +102,21 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     @Override
     public void show() {
         if (mMTGRewardVideoHandler != null && mMTGRewardVideoHandler.isReady()) {
-            mMTGRewardVideoHandler.show(mRewardId, mUserId);
+            if (TextUtils.isEmpty(mUserId)) {
+                mMTGRewardVideoHandler.show(mRewardId);
+            } else {
+                mMTGRewardVideoHandler.show(mRewardId, mUserId);
+            }
         } else {
             Log.e(TAG, "MTG RewardVideo not ready.");
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.loadFailed("MTG RewardVideo not ready.");
+            }
         }
     }
 
     @Override
     public void load() {
-        if (mMediationAdapterRewardListener == null) {
-            Log.e(TAG, "MediationAdapterRewardListener cannot be null. Please call setSDKRewardListener() first.");
-            return;
-        }
-
         mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
         mMTGRewardVideoHandler.load();
         mMTGRewardVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
