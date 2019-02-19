@@ -30,15 +30,16 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
 
     @Override
     protected T doInBackground(BaseRequest<T>... requests) {
-        if (isCancelled()) {
+        if (isCancelled() || requests == null || requests.length == 0) {
             return null;
         }
 
         try {
-            if (requests != null && requests.length > 0) {
-                return requests[0].request();
-            }
+            return requests[0].request();
         } catch (Exception e) {
+            if(mNetCallback != null) {
+                mNetCallback.onFail(e);
+            }
             e.printStackTrace();
         }
 
@@ -51,11 +52,7 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
 
         if (mActivitys.get() != null && !mActivitys.get().isFinishing()) {
             if(mNetCallback != null) {
-                if (response != null) {
-                    mNetCallback.onSuccess(response);
-                } else {
-                    mNetCallback.onFail();
-                }
+                mNetCallback.onSuccess(response);
             }
         } else {
             cancel(true);

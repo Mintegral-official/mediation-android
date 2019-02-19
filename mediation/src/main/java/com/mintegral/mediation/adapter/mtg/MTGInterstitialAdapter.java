@@ -28,6 +28,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     private boolean isMute = false;
     private boolean isReady = false;
+    private long loadSucessTime;
     private String appId;
     private String appKey;
     private String mInterstitialUnitId;
@@ -85,8 +86,16 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public void show() {
-        if (mMTGInterstitalVideoHandler != null) {
+        if (isReady) {
+            //判断isReady状态，如果为true且ready的时间超过1小时，则置为false
+            long time = System.currentTimeMillis() - loadSucessTime;
+            isReady = time < 3600000 && isReady;
+        }
+
+        if (mMTGInterstitalVideoHandler != null && isReady) {
             mMTGInterstitalVideoHandler.show();
+        } else {
+            Log.e(TAG, "MTG InterstitalVideo not ready.");
         }
     }
 
@@ -121,39 +130,52 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     private InterstitialVideoListener mInterstitialVideoListener = new InterstitialVideoListener() {
         @Override
-        public void onLoadSuccess(String s) {
-            mMediationAdapterInterstitialListener.loadSucceed();
-        }
+        public void onLoadSuccess(String s) {}
 
         @Override
         public void onVideoLoadSuccess(String s) {
+            loadSucessTime = System.currentTimeMillis();
             isReady = true;
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.loadSucceed();
+            }
         }
 
         @Override
         public void onVideoLoadFail(String s) {
             isReady = false;
-            mMediationAdapterInterstitialListener.loadFailed(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.loadFailed(s);
+            }
         }
 
         @Override
         public void onAdShow() {
-            mMediationAdapterInterstitialListener.showSucceed();
+            isReady = false;
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.showSucceed();
+            }
         }
 
         @Override
         public void onAdClose(boolean b) {
-            mMediationAdapterInterstitialListener.closed();
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.closed();
+            }
         }
 
         @Override
         public void onShowFail(String s) {
-            mMediationAdapterInterstitialListener.showFailed(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.showFailed(s);
+            }
         }
 
         @Override
         public void onVideoAdClicked(String s) {
-            mMediationAdapterInterstitialListener.clicked(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.clicked(s);
+            }
         }
     };
 }

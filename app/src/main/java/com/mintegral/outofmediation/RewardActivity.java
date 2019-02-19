@@ -74,7 +74,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         map.put(CommonConst.KEY_MUTE, false);
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
-        mtgAdSource.setTimeOut(1000);
+        mtgAdSource.setTimeOut(20000);
         paramsMap.put("1",mtgAdSource);
 
         manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
