@@ -21,5 +21,5 @@ public interface NetCallback<T> {
     /**
      * 请求失败
      */
-    void onFail();
+    void onFail(Exception e);
 }

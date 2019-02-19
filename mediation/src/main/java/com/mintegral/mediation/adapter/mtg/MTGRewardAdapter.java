@@ -104,11 +104,6 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
 
     @Override
     public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
-        if (mMediationAdapterRewardListener == null) {
-            Log.e(TAG, "MediationAdapterRewardListener cannot be null. Please call setSDKRewardListener() first.");
-            return;
-        }
-
         mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
         mMTGRewardVideoHandler.load();
         mMTGRewardVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
@@ -126,41 +121,51 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
 
     private RewardVideoListener mRewardVideoListener = new RewardVideoListener() {
         @Override
-        public void onVideoLoadSuccess(String s) {
-            mMediationAdapterRewardListener.loadSucceed();
-        }
-
-        @Override
         public void onLoadSuccess(String s) {}
 
         @Override
+        public void onVideoLoadSuccess(String s) {
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.loadSucceed();
+            }
+        }
+
+        @Override
         public void onVideoLoadFail(String s) {
-            mMediationAdapterRewardListener.loadFailed(s);
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.loadFailed(s);
+            }
         }
 
         @Override
         public void onAdShow() {
-            mMediationAdapterRewardListener.showSucceed();
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.showSucceed();
+            }
         }
 
         @Override
         public void onAdClose(boolean isCompleted, String s, float v) {
-            if (isCompleted) {
-                mMediationAdapterRewardListener.rewarded(s, Float.valueOf(v).intValue());
-            } else {
+            if (mMediationAdapterRewardListener != null) {
                 mMediationAdapterRewardListener.closed();
+                if (isCompleted) {
+                    mMediationAdapterRewardListener.rewarded(s, Float.valueOf(v).intValue());
+                }
             }
-
         }
 
         @Override
         public void onShowFail(String s) {
-            mMediationAdapterRewardListener.showFailed(s);
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.showFailed(s);
+            }
         }
 
         @Override
         public void onVideoAdClicked(String s) {
-            mMediationAdapterRewardListener.clicked(s);
+            if (mMediationAdapterRewardListener != null) {
+                mMediationAdapterRewardListener.clicked(s);
+            }
         }
     };
 }

@@ -11,5 +11,5 @@ public interface BaseRequest<T> {
      * 需自行实现，如HttpUrlConnection或者Okhttp
      * @return
      */
-    T request();
+    T request() throws Exception;
 }

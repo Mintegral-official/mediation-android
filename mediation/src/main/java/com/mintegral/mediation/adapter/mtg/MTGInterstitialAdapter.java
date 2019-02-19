@@ -74,11 +74,6 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public void load(Activity activity, Map<String, Object> localExtras, Map<String, String> serverExtras) {
-        if (mMediationAdapterInterstitialListener == null) {
-            Log.e(TAG, "MediationAdapterInterstitialListener cannot be null. Please call setSDKInterstitial() first.");
-            return;
-        }
-
         mMTGInterstitalVideoHandler.setInterstitialVideoListener(mInterstitialVideoListener);
         mMTGInterstitalVideoHandler.load();
         mMTGInterstitalVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
@@ -130,41 +125,52 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     private InterstitialVideoListener mInterstitialVideoListener = new InterstitialVideoListener() {
         @Override
-        public void onLoadSuccess(String s) {
-            mMediationAdapterInterstitialListener.loadSucceed();
-        }
+        public void onLoadSuccess(String s) {}
 
         @Override
         public void onVideoLoadSuccess(String s) {
             loadSucessTime = System.currentTimeMillis();
             isReady = true;
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.loadSucceed();
+            }
         }
 
         @Override
         public void onVideoLoadFail(String s) {
             isReady = false;
-            mMediationAdapterInterstitialListener.loadFailed(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.loadFailed(s);
+            }
         }
 
         @Override
         public void onAdShow() {
             isReady = false;
-            mMediationAdapterInterstitialListener.showSucceed();
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.showSucceed();
+            }
         }
 
         @Override
         public void onAdClose(boolean b) {
-            mMediationAdapterInterstitialListener.closed();
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.closed();
+            }
         }
 
         @Override
         public void onShowFail(String s) {
-            mMediationAdapterInterstitialListener.showFailed(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.showFailed(s);
+            }
         }
 
         @Override
         public void onVideoAdClicked(String s) {
-            mMediationAdapterInterstitialListener.clicked(s);
+            if (mMediationAdapterInterstitialListener != null) {
+                mMediationAdapterInterstitialListener.clicked(s);
+            }
         }
     };
 }
