@@ -112,7 +112,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     @Override
     public void onInterstitialAdLoadFailed(String instanceId,IronSourceError ironSourceError) {
         if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.loadFailed(getMoPubErrorMessage(ironSourceError));
+            mMediationAdapterInterstitialListener.loadFailed(getMIntergralErrorMessage(ironSourceError));
         }
     }
     @Override
@@ -132,7 +132,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     @Override
     public void onInterstitialAdShowFailed(String instanceId,IronSourceError ironSourceError) {
         if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.showFailed(getMoPubErrorMessage(ironSourceError));
+            mMediationAdapterInterstitialListener.showFailed(getMIntergralErrorMessage(ironSourceError));
         }
     }
 
@@ -152,7 +152,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     }
 
 
-    private String getMoPubErrorMessage(IronSourceError ironSourceError) {
+    private String getMIntergralErrorMessage(IronSourceError ironSourceError) {
         if (ironSourceError == null) {
             return MediationMTGErrorCode.INTERNAL_ERROR;
         }

@@ -50,6 +50,16 @@ public class MediationInterstitialManager {
         }
     };
 
+
+    /**
+     * 设置拦截器，如果不设置或设置为null，将使用默认
+     * @param interceptor
+     */
+    public void setInterceptor(BaseInterceptor interceptor){
+        if (interceptor != null) {
+            mInterceptor = interceptor;
+        }
+    }
     /**
      * 初始化sdk
      * @param activity
@@ -72,8 +82,8 @@ public class MediationInterstitialManager {
         if(adSources == null || adSources.size() == 0){
             if(mMediationAdapterInitListener != null){
                 mMediationAdapterInitListener.onInitFailed();
-                return;
             }
+            return;
         }
         interstitialAdapter = loopNextAdapter(activity,mediationUnitId,localParams,null);
 
@@ -256,7 +266,6 @@ public class MediationInterstitialManager {
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
-
             return;
         }
         if(interstitialAdapter != null ){

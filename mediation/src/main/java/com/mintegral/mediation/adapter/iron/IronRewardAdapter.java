@@ -136,7 +136,7 @@ public class IronRewardAdapter extends BaseRewardAdapter {
             @Override
             public void onRewardedVideoAdShowFailed(String instanceId,IronSourceError ironSourceError) {
                 if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.showFailed(getMoPubErrorMessage(ironSourceError));
+                    mediationAdapterRewardListener.showFailed(getMIntergralErrorMessage(ironSourceError));
                 }
             }
 
@@ -162,7 +162,6 @@ public class IronRewardAdapter extends BaseRewardAdapter {
                 if (isReady()) {
                     mMediationAdapterRewardListener.loadSucceed();
                 } else {
-
                     mMediationAdapterRewardListener.loadFailed(MediationMTGErrorCode.NETWORK_NO_FILL);
                 }
             }
@@ -170,7 +169,7 @@ public class IronRewardAdapter extends BaseRewardAdapter {
     }
 
 
-    private String getMoPubErrorMessage(IronSourceError ironSourceError) {
+    private String getMIntergralErrorMessage(IronSourceError ironSourceError) {
         if (ironSourceError == null) {
             return MediationMTGErrorCode.INTERNAL_ERROR;
         }
