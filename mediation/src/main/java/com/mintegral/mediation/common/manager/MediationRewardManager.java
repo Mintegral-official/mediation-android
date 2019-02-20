@@ -27,8 +27,6 @@ public class MediationRewardManager extends BaseManager{
     private MediationAdapterRewardListener mMediationAdapterRewardListener;
     private MediationAdapterInitListener mMediationAdapterInitListener;
     private BaseRewardAdapter rewardAdapter;
-    private Map<String,Object> mLocalParams;
-    private Map<String,String> mServiceParams;
     private WeakReference<Activity> activityWeakReference;
     private String mMediationUnitId;
     private AdSource currentAdSource;
@@ -50,9 +48,7 @@ public class MediationRewardManager extends BaseManager{
     }
 
     private void requestServiceSetting(Activity activity,String mediationUnitId,Map<String,Object> localParams){
-        mLocalParams = localParams;
         //TODO:当前版本不支持服务端下发配置
-        mServiceParams = null;
         if(mInterceptor != null){
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
@@ -63,7 +59,7 @@ public class MediationRewardManager extends BaseManager{
                 return;
             }
         }
-        rewardAdapter = loopNextAdapter(activity,mediationUnitId,localParams,null);
+        rewardAdapter = loopNextAdapter(activity,mediationUnitId);
 
     }
 
@@ -81,7 +77,7 @@ public class MediationRewardManager extends BaseManager{
 
                 @Override
                 public void onInitFailed() {
-                    if( loopNextAdapter(activity,mediationUnitId,localParams,serviceParams) == null){
+                    if( loopNextAdapter(activity,mediationUnitId) == null){
                         if(mMediationAdapterInitListener != null){
                             mMediationAdapterInitListener.onInitFailed();
                             mMediationAdapterInitListener = null;
@@ -98,7 +94,7 @@ public class MediationRewardManager extends BaseManager{
         }
     }
 
-    private BaseRewardAdapter loopNextAdapter( Activity activity, String mediationUnitId, Map<String,Object> localParams, Map<String,String> serviceParams){
+    private BaseRewardAdapter loopNextAdapter( Activity activity, String mediationUnitId){
         rewardAdapter = null;
         while (adSources != null && adSources.size() > 0){
             AdSource adSource = adSources.poll();
@@ -172,7 +168,7 @@ public class MediationRewardManager extends BaseManager{
 
                 @Override
                 public void loadFailed(String msg) {
-                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                         loadAndSetTimeOut();
                     }else{
                         loadFailedToUser(msg);
@@ -238,7 +234,7 @@ public class MediationRewardManager extends BaseManager{
         if(rewardAdapter != null ){
             loadAndSetTimeOut();
         }else{
-            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                 loadAndSetTimeOut();
             }else{
                 loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
@@ -308,9 +304,6 @@ public class MediationRewardManager extends BaseManager{
         return loadHadResult;
     }
 
-    public void setLoadHadResult(boolean loadHadResult) {
-        this.loadHadResult = loadHadResult;
-    }
     @Override
     public void loadTimeout(){
         //清空上个adapter的监听
@@ -318,7 +311,7 @@ public class MediationRewardManager extends BaseManager{
             rewardAdapter.setSDKRewardListener(null);
         }
 
-        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
             loadAndSetTimeOut();
         }else{
             loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);

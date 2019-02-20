@@ -102,8 +102,8 @@ public class MediationInterstitialHandler extends BaseHandler{
     }
 
     /**
-     * 设置Interstitial相关监听
-     * @param mediationAdapterInterstitialListener
+     * set Interstitial listener
+     * @param mediationAdapterInterstitialListener listener interstitial result
      */
     public void setMediationAdapterInterstitialListener(MediationAdapterInterstitialListener mediationAdapterInterstitialListener){
         try {

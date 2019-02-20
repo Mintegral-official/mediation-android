@@ -29,8 +29,6 @@ public class MediationInterstitialManager extends BaseManager{
     private MediationAdapterInterstitialListener mMediationAdapterInterstitialListener;
     private MediationAdapterInitListener mMediationAdapterInitListener;
     private BaseInterstitialAdapter interstitialAdapter;
-    private Map<String,Object> mLocalParams;
-    private Map<String,String> mServiceParams;
     private WeakReference<Activity> activityWeakReference;
     private String mMediationUnitId;
     private AdSource currentAdSource;
@@ -62,9 +60,7 @@ public class MediationInterstitialManager extends BaseManager{
     }
 
     private void requestServiceSetting(Activity activity,String mediationUnitId,Map<String,Object> localParams){
-        mLocalParams = localParams;
         //TODO:当前版本不支持服务端下发配置
-        mServiceParams = null;
         if(mInterceptor != null){
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
@@ -74,11 +70,11 @@ public class MediationInterstitialManager extends BaseManager{
             }
             return;
         }
-        interstitialAdapter = loopNextAdapter(activity,mediationUnitId,localParams,null);
+        interstitialAdapter = loopNextAdapter(activity,mediationUnitId);
 
     }
 
-    private BaseInterstitialAdapter loopNextAdapter( Activity activity, String mediationUnitId, Map<String,Object> localParams, Map<String,String> serviceParams){
+    private BaseInterstitialAdapter loopNextAdapter( Activity activity, String mediationUnitId){
         interstitialAdapter = null;
         while (adSources != null && adSources.size() > 0){
             AdSource adSource = adSources.poll();
@@ -116,7 +112,7 @@ public class MediationInterstitialManager extends BaseManager{
 
                 @Override
                 public void loadFailed(String msg) {
-                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
 
                         loadAndSetTimeOut();
                     }else{
@@ -166,7 +162,7 @@ public class MediationInterstitialManager extends BaseManager{
 
                 @Override
                 public void onInitFailed() {
-                    if( loopNextAdapter(activity,mediationUnitId,localParams,serviceParams) == null){
+                    if( loopNextAdapter(activity,mediationUnitId) == null){
                         if(mMediationAdapterInitListener != null){
                             mMediationAdapterInitListener.onInitFailed();
                         }
@@ -229,7 +225,7 @@ public class MediationInterstitialManager extends BaseManager{
         if(interstitialAdapter != null ){
             loadAndSetTimeOut();
         }else{
-            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                 loadAndSetTimeOut();
             }else{
                 loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
@@ -304,7 +300,7 @@ public class MediationInterstitialManager extends BaseManager{
             interstitialAdapter.setSDKInterstitial(null);
         }
 
-        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId,mLocalParams,mServiceParams))!= null){
+        if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
             loadAndSetTimeOut();
         }else{
             loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);

@@ -144,13 +144,19 @@ public class RewardActivity extends Activity implements View.OnClickListener {
                 initManager();
                 break;
             case R.id.reward_load:
+                if (manager != null) {
                 manager.load();
+                }
                 break;
             case R.id.reward_show:
-                manager.show();
+                if (manager != null) {
+                    manager.show();
+                }
                 break;
             case R.id.reward_is_ready:
-                Toast.makeText(RewardActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
+                if (manager != null) {
+                    Toast.makeText(RewardActivity.this, "ready:" + manager.isReady(), Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
         }
