@@ -154,9 +154,9 @@ public class MediationInterstitialManager extends BaseManager{
         }
     }
 
-    private void initAdapter(final Activity activity, final String mediationUnitId, final Map<String,Object> localParams, final Map<String,String> serviceParams, BaseInterstitialAdapter rewardAdapter){
-        if(rewardAdapter != null){
-            rewardAdapter.setSDKInitListener(new MediationAdapterInitListener() {
+    private void initAdapter(final Activity activity, final String mediationUnitId, final Map<String,Object> localParams, final Map<String,String> serviceParams, BaseInterstitialAdapter interstitialAdapter){
+        if(interstitialAdapter != null){
+            interstitialAdapter.setSDKInitListener(new MediationAdapterInitListener() {
                 @Override
                 public void onInitSucceed() {
                     if(mMediationAdapterInitListener != null){
@@ -173,7 +173,7 @@ public class MediationInterstitialManager extends BaseManager{
                     }
                 }
             });
-            rewardAdapter.init(activity,mediationUnitId,localParams,serviceParams);
+            interstitialAdapter.init(activity,mediationUnitId,localParams,serviceParams);
         }else{
             if(mMediationAdapterInitListener != null){
                 mMediationAdapterInitListener.onInitFailed();

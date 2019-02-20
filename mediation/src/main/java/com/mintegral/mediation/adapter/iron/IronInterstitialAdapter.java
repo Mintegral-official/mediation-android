@@ -45,11 +45,13 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
             if(ob instanceof String){
                 //初始化reward video
                 appKey = ob.toString();
-                IronSource.initISDemandOnly(activity, appKey, IronSource.AD_UNIT.INTERSTITIAL);
-                if (mMediationAdapterInitListener != null) {
-                    mMediationAdapterInitListener.onInitSucceed();
+                if (!TextUtils.isEmpty(appKey)) {
+                    IronSource.initISDemandOnly(activity, appKey, IronSource.AD_UNIT.INTERSTITIAL);
+                    if (mMediationAdapterInitListener != null) {
+                        mMediationAdapterInitListener.onInitSucceed();
+                    }
+                    return;
                 }
-                return;
             }
 
         }
