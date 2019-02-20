@@ -1,30 +1,30 @@
 package com.mintegral.mediation.common;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+
 
 public class BaseLifecycleListener implements LifecycleListener {
     @Override
-    public void onCreate(@NonNull final Activity activity) {}
+    public void onCreate( final Activity activity) {}
 
     @Override
-    public void onStart(@NonNull final Activity activity) {}
+    public void onStart( final Activity activity) {}
 
     @Override
-    public void onPause(@NonNull final Activity activity) {}
+    public void onPause( final Activity activity) {}
 
     @Override
-    public void onResume(@NonNull final Activity activity) {}
+    public void onResume(final Activity activity) {}
 
     @Override
-    public void onRestart(@NonNull final Activity activity) {}
+    public void onRestart( final Activity activity) {}
 
     @Override
-    public void onStop(@NonNull final Activity activity) {}
+    public void onStop( final Activity activity) {}
 
     @Override
-    public void onDestroy(@NonNull final Activity activity) {}
+    public void onDestroy( final Activity activity) {}
 
     @Override
-    public void onBackPressed(@NonNull final Activity activity) {}
+    public void onBackPressed( final Activity activity) {}
 }

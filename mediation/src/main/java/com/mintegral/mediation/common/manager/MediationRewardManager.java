@@ -1,10 +1,7 @@
-package com.mintegral.mediation.out.manager;
+package com.mintegral.mediation.common.manager;
 
 import android.app.Activity;
 import android.os.Handler;
-
-import android.os.Looper;
-import android.os.Message;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
@@ -13,6 +10,7 @@ import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
+import com.mintegral.mediation.common.utils.TimerHandler;
 import com.mintegral.mediation.out.interceptor.DefaultRewardInterceptor;
 
 import java.lang.ref.WeakReference;
@@ -22,7 +20,7 @@ import java.util.Map;
 /**
  * @author songjunjun
  */
-public class MediationRewardManager {
+public class MediationRewardManager extends BaseManager{
 
     private BaseInterceptor mInterceptor = new DefaultRewardInterceptor();
     private LinkedList<AdSource> adSources;
@@ -35,20 +33,7 @@ public class MediationRewardManager {
     private String mMediationUnitId;
     private AdSource currentAdSource;
     private boolean loadHadResult = false;
-    private  Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    if (!loadHadResult) {
-                        loadTimeout();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private  Handler handler = new TimerHandler(this) ;
 
 
     /**
@@ -57,6 +42,7 @@ public class MediationRewardManager {
      * @param mediationUnitId
      * @param localParams
      */
+    @Override
     public void init(Activity activity, String mediationUnitId, Map<String,Object> localParams){
         activityWeakReference = new WeakReference<Activity>(activity);
         mMediationUnitId = mediationUnitId;
@@ -233,6 +219,7 @@ public class MediationRewardManager {
      * 设置初始化的成功失败监听
      * @param mediationAdapterInitListener
      */
+    @Override
     public void setMediationAdapterInitListener(MediationAdapterInitListener mediationAdapterInitListener){
         mMediationAdapterInitListener = mediationAdapterInitListener;
     }
@@ -240,6 +227,7 @@ public class MediationRewardManager {
     /**
      * load方法，用于加载数据
      */
+    @Override
     public void load(){
 
         loadHadResult = false;
@@ -261,6 +249,7 @@ public class MediationRewardManager {
     /**
      * 展示广告
      */
+    @Override
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
@@ -276,8 +265,9 @@ public class MediationRewardManager {
 
     /**
      * 是否满足展示条件
-     * @return
+     * @return if can show reture true, or false
      */
+    @Override
     public boolean isReady(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
@@ -291,8 +281,9 @@ public class MediationRewardManager {
 
     /**
      * 获取生命周期监听，在对应的生命周期调用
-     * @return
+     * @return LifecycleListener
      */
+    @Override
     public LifecycleListener getLifecycleListener(){
         if(rewardAdapter != null){
             return rewardAdapter.getLifecycleListener();
@@ -312,9 +303,16 @@ public class MediationRewardManager {
         }
     }
 
+    @Override
+    public boolean isLoadHadResult() {
+        return loadHadResult;
+    }
 
-
-    private void loadTimeout(){
+    public void setLoadHadResult(boolean loadHadResult) {
+        this.loadHadResult = loadHadResult;
+    }
+    @Override
+    public void loadTimeout(){
         //清空上个adapter的监听
         if(rewardAdapter != null){
             rewardAdapter.setSDKRewardListener(null);

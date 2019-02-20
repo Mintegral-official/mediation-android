@@ -1,7 +1,6 @@
 package com.mintegral.mediation.adapter.iron;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
@@ -183,13 +182,13 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
     private LifecycleListener mLifecycleListener = new BaseLifecycleListener() {
         @Override
-        public void onPause(@NonNull Activity activity) {
+        public void onPause( Activity activity) {
             super.onPause(activity);
             IronSource.onPause(activity);
         }
 
         @Override
-        public void onResume(@NonNull Activity activity) {
+        public void onResume( Activity activity) {
             super.onResume(activity);
             IronSource.onResume(activity);
         }

@@ -13,6 +13,7 @@ public class MediationMTGErrorCode {
     public static String ACTIVITY_IS_NULL= "ACTIVITY_IS_NULL";
     public static String ADSOURCE_IS_TIMEOUT = "ADSOURCE_IS_TIMEOUT";
 
+
 //    public static String = "";
 //    public static String = "";
 //    public static String = "";

@@ -12,7 +12,8 @@ import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
-import com.mintegral.mediation.out.manager.MediationInterstitialManager;
+import com.mintegral.mediation.out.handler.MediationInterstitialHandler;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class InterstitialActivity extends Activity implements View.OnClickListener {
 
     private Button showBtn,loadBtn,isReadyBtn,initBtn;
-    private MediationInterstitialManager manager;
+    private MediationInterstitialHandler manager;
     private LifecycleListener lifecycleListener;
 
     @Override
@@ -33,7 +34,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
     }
 
     private void initManager(){
-        manager = new MediationInterstitialManager();
+        manager = new MediationInterstitialHandler();
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
             public void onInitSucceed() {
@@ -73,7 +74,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         paramsMap.put("1",mtgAdSource);
 
 
-        manager.setMediationAdapterInterstitialListenerr(new MediationAdapterInterstitialListener() {
+        manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
             @Override
             public void loadSucceed() {
                 Toast.makeText(InterstitialActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
@@ -105,7 +106,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
             }
 
         });
-        manager.init(this,"9999",paramsMap);
+        manager.init(this,paramsMap);
         lifecycleListener = manager.getLifecycleListener();
     }
     private void initView(){
@@ -133,13 +134,19 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
             case R.id.reward_init:
                 initManager();
             case R.id.reward_load:
-                manager.load();
+                if (manager != null) {
+                    manager.load();
+                }
                 break;
             case R.id.reward_show:
-                manager.show();
+                if (manager != null) {
+                    manager.show();
+                }
                 break;
             case R.id.reward_is_ready:
-                Toast.makeText(InterstitialActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
+                if (manager != null) {
+                    Toast.makeText(InterstitialActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
         }

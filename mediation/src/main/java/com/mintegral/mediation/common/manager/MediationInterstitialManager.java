@@ -1,9 +1,8 @@
-package com.mintegral.mediation.out.manager;
+package com.mintegral.mediation.common.manager;
 
 import android.app.Activity;
 
 import android.os.Handler;
-import android.os.Message;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
@@ -13,8 +12,8 @@ import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
 
+import com.mintegral.mediation.common.utils.TimerHandler;
 import com.mintegral.mediation.out.interceptor.DefaultInterstitialInterceptor;
-import com.mintegral.mediation.out.interceptor.DefaultRewardInterceptor;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
@@ -23,7 +22,7 @@ import java.util.Map;
 /**
  * @author songjunjun
  */
-public class MediationInterstitialManager {
+public class MediationInterstitialManager extends BaseManager{
 
     private BaseInterceptor mInterceptor = new DefaultInterstitialInterceptor();
     private LinkedList<AdSource> adSources;
@@ -37,18 +36,7 @@ public class MediationInterstitialManager {
     private AdSource currentAdSource;
 
     private boolean loadHadResult = false;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    if (!loadHadResult) {
-                        loadTimeout();
-                    }
-                    break;
-            }
-        }
-    };
+    private Handler handler = new TimerHandler(this);
 
 
     /**
@@ -66,6 +54,7 @@ public class MediationInterstitialManager {
      * @param mediationUnitId
      * @param localParams
      */
+    @Override
     public void init(Activity activity, String mediationUnitId, Map<String,Object> localParams){
         activityWeakReference = new WeakReference<Activity>(activity);
         mMediationUnitId = mediationUnitId;
@@ -213,22 +202,24 @@ public class MediationInterstitialManager {
      * 设置初始化监听
      * @param mediationAdapterInitListener
      */
+    @Override
     public void setMediationAdapterInitListener(MediationAdapterInitListener mediationAdapterInitListener){
         mMediationAdapterInitListener = mediationAdapterInitListener;
     }
 
     /**
      * 设置Interstitial相关监听
-     * @param mediationAdapterInterstitialListenerr
+     * @param mediationAdapterInterstitialListener
      */
-    public void setMediationAdapterInterstitialListenerr(MediationAdapterInterstitialListener mediationAdapterInterstitialListenerr){
-        mMediationAdapterInterstitialListener = mediationAdapterInterstitialListenerr;
+    public void setMediationAdapterInterstitialListener(MediationAdapterInterstitialListener mediationAdapterInterstitialListener){
+        mMediationAdapterInterstitialListener = mediationAdapterInterstitialListener;
         setAdapterInterstitial();
     }
 
     /**
      * 加载数据
      */
+    @Override
     public void load(){
         loadHadResult = false;
         if(activityWeakReference == null || activityWeakReference.get() == null){
@@ -248,8 +239,9 @@ public class MediationInterstitialManager {
 
     /**
      * 判断是否可以展示
-     * @return
+     * @return if can show reture true, or false
      */
+    @Override
     public boolean isReady(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
@@ -263,6 +255,7 @@ public class MediationInterstitialManager {
     /**
      * 展示广告
      */
+    @Override
     public void show(){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
@@ -277,8 +270,9 @@ public class MediationInterstitialManager {
 
     /**
      * 获取activity的生命周期的监听
-     * @return
+     * @return LifecycleListener
      */
+    @Override
     public LifecycleListener getLifecycleListener(){
         if(interstitialAdapter != null){
             return interstitialAdapter.getLifecycleListener();
@@ -298,8 +292,13 @@ public class MediationInterstitialManager {
         }
     }
 
+    @Override
+    public boolean isLoadHadResult() {
+        return loadHadResult;
+    }
 
-    private void loadTimeout(){
+    @Override
+    public void loadTimeout(){
         //清空上个adapter的监听
         if(interstitialAdapter != null){
             interstitialAdapter.setSDKInterstitial(null);

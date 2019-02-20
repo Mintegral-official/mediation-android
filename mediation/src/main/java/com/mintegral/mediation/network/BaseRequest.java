@@ -9,7 +9,7 @@ public interface BaseRequest<T> {
     /**
      * Network Request Method
      * u need to implement it, such as HttpUrlConnection or Okhttp.
-     * @return
+     * @return T
      */
     T request() throws Exception;
 }

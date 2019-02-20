@@ -13,7 +13,8 @@ import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.bean.AdSource;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
-import com.mintegral.mediation.out.manager.MediationRewardManager;
+import com.mintegral.mediation.out.handler.MediationRewardVideoHandler;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
 
     private Button showBtn,loadBtn,isReadyBtn,initBtn;
 
-    private MediationRewardManager manager;
+    private MediationRewardVideoHandler manager;
     private LifecycleListener lifecycleListener;
 
     @Override
@@ -36,7 +37,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
 
     private void initManager(){
 
-        manager = new MediationRewardManager();
+        manager = new MediationRewardVideoHandler();
 
         manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
@@ -114,7 +115,7 @@ public class RewardActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(RewardActivity.this,"rewarded:"+name+"-amount:"+amount,Toast.LENGTH_LONG).show();
             }
         });
-        manager.init(this,"9999",paramsMap);
+        manager.init(this,paramsMap);
         lifecycleListener = manager.getLifecycleListener();
     }
     private void initView(){

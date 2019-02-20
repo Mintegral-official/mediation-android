@@ -1,16 +1,15 @@
 package com.mintegral.mediation.common;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
 
 public interface LifecycleListener {
-    void onCreate(@NonNull Activity activity);
-    void onStart(@NonNull Activity activity);
-    void onPause(@NonNull Activity activity);
-    void onResume(@NonNull Activity activity);
+    void onCreate( Activity activity);
+    void onStart( Activity activity);
+    void onPause( Activity activity);
+    void onResume( Activity activity);
 
-    void onRestart(@NonNull Activity activity);
-    void onStop(@NonNull Activity activity);
-    void onDestroy(@NonNull Activity activity);
-    void onBackPressed(@NonNull Activity activity);
+    void onRestart( Activity activity);
+    void onStop( Activity activity);
+    void onDestroy( Activity activity);
+    void onBackPressed( Activity activity);
 }
