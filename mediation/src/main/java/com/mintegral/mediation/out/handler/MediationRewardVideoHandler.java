@@ -21,10 +21,13 @@ public class MediationRewardVideoHandler extends BaseHandler{
      * 后续版本使用，标记在当前聚合平台的广告位
      */
     private String mediationUnitId = "";
+
+    public MediationRewardVideoHandler(){
+        mMediationRewardManager = new MediationRewardManager();
+    }
     @Override
     public void init(Activity activity,  Map<String, Object> localParams) {
         try {
-            mMediationRewardManager = new MediationRewardManager();
             mMediationRewardManager.init(activity,mediationUnitId,localParams);
         } catch (Exception e) {
             if(mMediationAdapterInitListener != null){

@@ -58,8 +58,6 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
         adSource.setTimeOut(10000);
         paramsMap.put("2",adSource);
-//        map.put("local","88f1a7f5");
-//        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
 
         //MTG
         Map<String,Object> map = new HashMap<>();
@@ -133,6 +131,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.reward_init:
                 initManager();
+                break;
             case R.id.reward_load:
                 if (manager != null) {
                     manager.load();

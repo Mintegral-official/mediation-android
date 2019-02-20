@@ -17,7 +17,7 @@ public abstract class BaseHandler {
      * @param activity context ,but ironsource need activity
      * @param localParams set params in code
      */
-    public abstract void init(Activity activity, Map<String,Object> localParams);
+    public abstract void init(Activity activity, Map<String, Object> localParams);
 
     /**
      * set init state listener
