@@ -65,9 +65,7 @@ public class MediationInterstitialManager extends BaseManager{
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
         if(adSources == null || adSources.size() == 0){
-            if(mMediationAdapterInitListener != null){
-                mMediationAdapterInitListener.onInitFailed();
-            }
+           callInitListener(false);
             return;
         }
         interstitialAdapter = loopNextAdapter(activity,mediationUnitId);
@@ -155,25 +153,19 @@ public class MediationInterstitialManager extends BaseManager{
             interstitialAdapter.setSDKInitListener(new MediationAdapterInitListener() {
                 @Override
                 public void onInitSucceed() {
-                    if(mMediationAdapterInitListener != null){
-                        mMediationAdapterInitListener.onInitSucceed();
-                    }
+                    callInitListener(true);
                 }
 
                 @Override
                 public void onInitFailed() {
                     if( loopNextAdapter(activity,mediationUnitId) == null){
-                        if(mMediationAdapterInitListener != null){
-                            mMediationAdapterInitListener.onInitFailed();
-                        }
+                        callInitListener(false);
                     }
                 }
             });
             interstitialAdapter.init(activity,mediationUnitId,localParams,serviceParams);
         }else{
-            if(mMediationAdapterInitListener != null){
-                mMediationAdapterInitListener.onInitFailed();
-            }
+            callInitListener(false);
         }
     }
 
@@ -317,4 +309,15 @@ public class MediationInterstitialManager extends BaseManager{
         }
     }
 
+    @Override
+    void callInitListener(boolean succeed) {
+        if(mMediationAdapterInitListener != null){
+            if(succeed){
+                mMediationAdapterInitListener.onInitSucceed();
+            }else {
+                mMediationAdapterInitListener.onInitFailed();
+            }
+            mMediationAdapterInitListener = null;
+        }
+    }
 }

@@ -17,4 +17,5 @@ public abstract class BaseManager {
     abstract LifecycleListener getLifecycleListener();
     public abstract void loadTimeout();
     public abstract boolean isLoadHadResult();
+    abstract void callInitListener(boolean succeed);
 }

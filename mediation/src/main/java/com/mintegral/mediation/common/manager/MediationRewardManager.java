@@ -53,11 +53,8 @@ public class MediationRewardManager extends BaseManager{
             adSources = mInterceptor.onInterceptor(mediationUnitId,localParams,"");
         }
         if(adSources == null || adSources.size() == 0){
-            if(mMediationAdapterInitListener != null){
-                mMediationAdapterInitListener.onInitFailed();
-                mMediationAdapterInitListener = null;
-                return;
-            }
+            callInitListener(false);
+            return;
         }
         rewardAdapter = loopNextAdapter(activity,mediationUnitId);
 
@@ -69,28 +66,19 @@ public class MediationRewardManager extends BaseManager{
             rewardAdapter.setSDKInitListener(new MediationAdapterInitListener() {
                 @Override
                 public void onInitSucceed() {
-                    if(mMediationAdapterInitListener != null){
-                        mMediationAdapterInitListener.onInitSucceed();
-                        mMediationAdapterInitListener = null;
-                    }
+                    callInitListener(true);
                 }
 
                 @Override
                 public void onInitFailed() {
                     if( loopNextAdapter(activity,mediationUnitId) == null){
-                        if(mMediationAdapterInitListener != null){
-                            mMediationAdapterInitListener.onInitFailed();
-                            mMediationAdapterInitListener = null;
-                        }
+                        callInitListener(false);
                     }
                 }
             });
             rewardAdapter.init(activity,mediationUnitId,localParams,serviceParams);
         }else{
-            if(mMediationAdapterInitListener != null){
-                mMediationAdapterInitListener.onInitFailed();
-                mMediationAdapterInitListener = null;
-            }
+            callInitListener(false);
         }
     }
 
@@ -325,6 +313,18 @@ public class MediationRewardManager extends BaseManager{
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
             }
+        }
+    }
+
+    @Override
+    void callInitListener(boolean succeed) {
+        if(mMediationAdapterInitListener != null){
+            if(succeed){
+                mMediationAdapterInitListener.onInitSucceed();
+            }else {
+                mMediationAdapterInitListener.onInitFailed();
+            }
+            mMediationAdapterInitListener = null;
         }
     }
 
