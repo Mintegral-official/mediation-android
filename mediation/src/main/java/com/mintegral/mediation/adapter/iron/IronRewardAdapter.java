@@ -3,6 +3,7 @@ package com.mintegral.mediation.adapter.iron;
 import android.app.Activity;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
@@ -25,7 +26,7 @@ public class IronRewardAdapter extends BaseRewardAdapter {
 
     private String appKey = "";
     // This is the instance id used inside ironSource SDK
-    private String mInstanceId = "0";
+//    private String mInstanceId = "0";
     // This is the placement name used inside ironSource SDK
     private String mPlacementName = null;
     // Indicates if IronSource RV adapter is in its first init flow
@@ -40,15 +41,13 @@ public class IronRewardAdapter extends BaseRewardAdapter {
                 //初始化reward video
                 appKey = ob.toString();
                 if (!TextUtils.isEmpty(appKey)) {
-                    IronSource.initISDemandOnly(activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO);
-                    if (mMediationAdapterInitListener != null) {
-                        mMediationAdapterInitListener.onInitSucceed();
-
-                    }
+                    IronSource.init(activity, appKey, IronSource.AD_UNIT.REWARDED_VIDEO);
+//                    if (mMediationAdapterInitListener != null) {
+//                        mMediationAdapterInitListener.onInitSucceed();
+//                    }
                     return;
                 }
             }
-
         }
         if (mMediationAdapterInitListener != null) {
             mMediationAdapterInitListener.onInitFailed();
@@ -78,46 +77,52 @@ public class IronRewardAdapter extends BaseRewardAdapter {
     @Override
     public void setSDKInitListener(MediationAdapterInitListener mediationAdapterInitListener) {
         mMediationAdapterInitListener = mediationAdapterInitListener;
+        setRewardListenerToIronsource();
     }
 
     @Override
     public void show() {
         if (TextUtils.isEmpty(mPlacementName)) {
-            IronSource.showISDemandOnlyRewardedVideo(mInstanceId);
+            IronSource.showRewardedVideo();
         } else {
-            IronSource.showISDemandOnlyRewardedVideo(mInstanceId, mPlacementName);
+            IronSource.showRewardedVideo( mPlacementName);
         }
     }
 
-    @Override
-    public void setSDKRewardListener(final MediationAdapterRewardListener mediationAdapterRewardListener) {
-        mMediationAdapterRewardListener = mediationAdapterRewardListener;
-        IronSource.setISDemandOnlyRewardedVideoListener(new ISDemandOnlyRewardedVideoListener() {
+    private void setRewardListenerToIronsource(){
+        IronSource.setRewardedVideoListener(new RewardedVideoListener() {
             @Override
-            public void onRewardedVideoAdOpened(String instanceId) {
-                if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.showSucceed();
+            public void onRewardedVideoAdOpened() {
+                if(mMediationAdapterRewardListener != null){
+                    mMediationAdapterRewardListener.showSucceed();
                 }
             }
 
             @Override
-            public void onRewardedVideoAdClosed(String instanceId) {
-                if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.closed();
+            public void onRewardedVideoAdClosed() {
+                if(mMediationAdapterRewardListener != null){
+                    mMediationAdapterRewardListener.closed();
                 }
             }
 
             @Override
-            public void onRewardedVideoAvailabilityChanged(String instanceId,boolean b) {
+            public void onRewardedVideoAvailabilityChanged(boolean b) {
 
                 // Invoke only for first load, ignore for all others and rely on 'hasAdAvailable'
                 if (mIsFirstInitFlow) {
-                    if (mediationAdapterRewardListener != null) {
+                    if (mMediationAdapterInitListener != null) {
                         if (b) {
-                            mediationAdapterRewardListener.loadSucceed();
+                            mMediationAdapterInitListener.onInitSucceed();
                         } else {
 
-                            mediationAdapterRewardListener.loadFailed(MediationMTGErrorCode.NETWORK_NO_FILL);
+                            mMediationAdapterInitListener.onInitFailed();
+                        }
+                    }
+                    if (mMediationAdapterRewardListener != null) {
+                        if (b) {
+                            mMediationAdapterRewardListener.loadSucceed();
+                        } else {
+                            mMediationAdapterRewardListener.loadFailed(MediationMTGErrorCode.UNSPECIFIED);
                         }
                     }
                     mIsFirstInitFlow = false;
@@ -128,32 +133,47 @@ public class IronRewardAdapter extends BaseRewardAdapter {
 
 
             @Override
-            public void onRewardedVideoAdRewarded(String instanceId,Placement placement) {
-                if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.rewarded(placement.getRewardName(),placement.getRewardAmount());
+            public void onRewardedVideoAdRewarded(Placement placement) {
+                if(mMediationAdapterRewardListener != null){
+                    mMediationAdapterRewardListener.rewarded(placement.getRewardName(),placement.getRewardAmount());
                 }
             }
 
             @Override
-            public void onRewardedVideoAdShowFailed(String instanceId,IronSourceError ironSourceError) {
-                if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.showFailed(getMIntergralErrorMessage(ironSourceError));
+            public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
+                if(mMediationAdapterRewardListener != null){
+                    mMediationAdapterRewardListener.showFailed(getMIntergralErrorMessage(ironSourceError));
                 }
             }
 
             @Override
-            public void onRewardedVideoAdClicked(String s, Placement placement) {
-                if(mediationAdapterRewardListener != null){
-                    mediationAdapterRewardListener.clicked(placement.toString());
+            public void onRewardedVideoAdClicked(Placement placement) {
+                if(mMediationAdapterRewardListener != null){
+                    mMediationAdapterRewardListener.clicked(placement.toString());
                 }
             }
 
+            @Override
+            public void onRewardedVideoAdEnded() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdStarted() {
+
+            }
         });
     }
 
     @Override
+    public void setSDKRewardListener(final MediationAdapterRewardListener mediationAdapterRewardListener) {
+        mMediationAdapterRewardListener = mediationAdapterRewardListener;
+        setRewardListenerToIronsource();
+    }
+
+    @Override
     public boolean isReady() {
-        return IronSource.isISDemandOnlyRewardedVideoAvailable(mInstanceId);
+        return IronSource.isRewardedVideoAvailable();
     }
 
     @Override

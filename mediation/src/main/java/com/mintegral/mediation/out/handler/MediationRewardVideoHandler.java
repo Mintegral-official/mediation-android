@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
+import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
 import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
@@ -115,6 +116,17 @@ public class MediationRewardVideoHandler extends BaseHandler{
             mMediationAdapterRewardListener = mediationAdapterRewardListener;
             if(mMediationRewardManager != null){
                 mMediationRewardManager.setMediationAdapterRewardListener(mediationAdapterRewardListener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setInterceptor(BaseInterceptor interceptor) {
+        try {
+            if(mMediationRewardManager != null){
+                mMediationRewardManager.setInterceptor(interceptor);
             }
         } catch (Exception e) {
             e.printStackTrace();

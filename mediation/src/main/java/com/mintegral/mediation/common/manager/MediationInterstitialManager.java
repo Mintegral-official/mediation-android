@@ -41,6 +41,7 @@ public class MediationInterstitialManager extends BaseManager{
      * 设置拦截器，如果不设置或设置为null，将使用默认
      * @param interceptor
      */
+    @Override
     public void setInterceptor(BaseInterceptor interceptor){
         if (interceptor != null) {
             mInterceptor = interceptor;

@@ -3,6 +3,7 @@ package com.mintegral.mediation.out.handler;
 import android.app.Activity;
 
 import com.mintegral.mediation.common.LifecycleListener;
+import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 
 import java.util.Map;
@@ -46,4 +47,6 @@ public abstract class BaseHandler {
      * @return lifecycleListener
      */
     public abstract LifecycleListener getLifecycleListener();
+
+    public abstract void setInterceptor(BaseInterceptor interceptor);
 }

@@ -21,7 +21,7 @@ import java.util.Map;
 public class InterstitialActivity extends Activity implements View.OnClickListener {
 
     private Button showBtn,loadBtn,isReadyBtn,initBtn;
-    private MediationInterstitialHandler manager;
+    private MediationInterstitialHandler mediationInterstitialHandler;
     private LifecycleListener lifecycleListener;
 
     @Override
@@ -34,8 +34,8 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
     }
 
     private void initManager(){
-        manager = new MediationInterstitialHandler();
-        manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
+        mediationInterstitialHandler = new MediationInterstitialHandler();
+        mediationInterstitialHandler.setMediationAdapterInitListener(new MediationAdapterInitListener() {
             @Override
             public void onInitSucceed() {
                 Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
@@ -72,7 +72,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         paramsMap.put("1",mtgAdSource);
 
 
-        manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
+        mediationInterstitialHandler.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
             @Override
             public void loadSucceed() {
                 Toast.makeText(InterstitialActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
@@ -104,8 +104,8 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
             }
 
         });
-        manager.init(this,paramsMap);
-        lifecycleListener = manager.getLifecycleListener();
+        mediationInterstitialHandler.init(this,paramsMap);
+        lifecycleListener = mediationInterstitialHandler.getLifecycleListener();
     }
     private void initView(){
         initBtn = findViewById(R.id.reward_init);
@@ -133,18 +133,18 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
                 initManager();
                 break;
             case R.id.reward_load:
-                if (manager != null) {
-                    manager.load();
+                if (mediationInterstitialHandler != null) {
+                    mediationInterstitialHandler.load();
                 }
                 break;
             case R.id.reward_show:
-                if (manager != null) {
-                    manager.show();
+                if (mediationInterstitialHandler != null) {
+                    mediationInterstitialHandler.show();
                 }
                 break;
             case R.id.reward_is_ready:
-                if (manager != null) {
-                    Toast.makeText(InterstitialActivity.this,"ready:"+manager.isReady(),Toast.LENGTH_LONG).show();
+                if (mediationInterstitialHandler != null) {
+                    Toast.makeText(InterstitialActivity.this,"ready:"+mediationInterstitialHandler.isReady(),Toast.LENGTH_LONG).show();
                 }
                 break;
             default:

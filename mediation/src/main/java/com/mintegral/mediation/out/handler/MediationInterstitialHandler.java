@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
+import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListener;
 import com.mintegral.mediation.common.manager.MediationInterstitialManager;
@@ -149,6 +150,17 @@ public class MediationInterstitialHandler extends BaseHandler{
             mMediationAdapterInterstitialListener = mediationAdapterInterstitialListener;
             if (mediationInterstitialManager != null){
                 mediationInterstitialManager.setMediationAdapterInterstitialListener(mediationAdapterInterstitialListener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setInterceptor(BaseInterceptor interceptor) {
+        try {
+            if (mediationInterstitialManager != null){
+                mediationInterstitialManager.setInterceptor(interceptor);
             }
         } catch (Exception e) {
             e.printStackTrace();

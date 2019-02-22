@@ -89,6 +89,7 @@ public class MediationRewardManager extends BaseManager{
             if(adSource != null){
                 currentAdSource = adSource;
                 rewardAdapter = newInstanceCurrentAdapter(adSource);
+
                 //初始化当前的adapter
                 initAdapter(activity,mediationUnitId,adSource.getLocalParams(),adSource.getServiceParams(),rewardAdapter);
                 //如果已经有adapter了，就跳出
@@ -124,6 +125,7 @@ public class MediationRewardManager extends BaseManager{
      * 设置拦截器，如果不设置或设置为null，将使用默认
      * @param interceptor
      */
+    @Override
     public void setInterceptor(BaseInterceptor interceptor){
         if (interceptor != null) {
             mInterceptor = interceptor;
