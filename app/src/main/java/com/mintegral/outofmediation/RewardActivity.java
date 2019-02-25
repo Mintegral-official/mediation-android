@@ -53,46 +53,32 @@ public class RewardActivity extends Activity implements View.OnClickListener {
             }
         });
         Map<String, Object> paramsMap = new HashMap<>();
-//        //IronSource
-//        final AdSource adSource = new AdSource();
-//        Map<String,Object> ironsourceMap = new HashMap<>();
-//        ironsourceMap.put("local","88f1a7f5");
-//        adSource.setLocalParams(ironsourceMap);
-//        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronRewardAdapter");
-//        adSource.setTimeOut(1000);
-//        paramsMap.put("2",adSource);
-////        map.put("local","88f1a7f5");
-////        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
-//
-//        //MTG
-//        Map<String,Object> map = new HashMap<>();
-//        AdSource mtgAdSource = new AdSource();
-//        map.put(CommonConst.KEY_APPID, "92762");
-//        map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
-//        map.put(CommonConst.KEY_USERID, "123");
-//        map.put(CommonConst.KEY_REWARDID, "12817");
-//        map.put(CommonConst.KEY_REWARDUNITID, "21310");
-//        map.put(CommonConst.KEY_MUTE, false);
-//        mtgAdSource.setLocalParams(map);
-//        mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
-//        mtgAdSource.setTimeOut(20000);
-//        paramsMap.put("1",mtgAdSource);
-
-
-        AdSource adSource = new AdSource();
-        Map<String, Object> ironsourceMap = new HashMap<>();
-        ironsourceMap.put("local", "8983f4cd0--");
+        //IronSource
+        final AdSource adSource = new AdSource();
+        Map<String,Object> ironsourceMap = new HashMap<>();
+        ironsourceMap.put("local","88f1a7f5");
         adSource.setLocalParams(ironsourceMap);
         adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronRewardAdapter");
-        adSource.setTimeOut(20);
-        paramsMap.put("1", adSource);
-        AdSource adSource1 = new AdSource();
-        Map<String, Object> ironsourceMap1 = new HashMap<>();
-        ironsourceMap1.put("local", "8984daed");
-        adSource1.setLocalParams(ironsourceMap1);
-        adSource1.setTargetClass("com.mintegral.mediation.adapter.iron.IronRewardAdapter");
-        adSource1.setTimeOut(20000);
-        paramsMap.put("2", adSource1);
+        adSource.setTimeOut(100000);
+        paramsMap.put("2",adSource);
+//        map.put("local","88f1a7f5");
+//        map.put("targetClass","com.mintegral.mediation.adapter.iron.IronRewardAdapter");
+
+        //MTG
+        Map<String,Object> map = new HashMap<>();
+        AdSource mtgAdSource = new AdSource();
+        map.put(CommonConst.KEY_APPID, "92762");
+        map.put(CommonConst.KEY_APPKEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
+        map.put(CommonConst.KEY_USERID, "123");
+        map.put(CommonConst.KEY_REWARDID, "12817");
+        map.put(CommonConst.KEY_REWARDUNITID, "21310");
+        map.put(CommonConst.KEY_MUTE, false);
+        mtgAdSource.setLocalParams(map);
+        mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
+        mtgAdSource.setTimeOut(200);
+        paramsMap.put("1",mtgAdSource);
+
+
 
         mediationRewardVideoHandler.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
             @Override

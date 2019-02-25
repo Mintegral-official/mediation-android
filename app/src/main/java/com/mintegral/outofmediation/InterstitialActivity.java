@@ -56,7 +56,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         ironsourceMap.put("local","88f1a7f5");
         adSource.setLocalParams(ironsourceMap);
         adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");
-        adSource.setTimeOut(10000);
+        adSource.setTimeOut(30000);
         paramsMap.put("2",adSource);
 
         //MTG
@@ -68,7 +68,7 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
         map.put(CommonConst.KEY_MUTE, false);
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");
-        mtgAdSource.setTimeOut(10000);
+        mtgAdSource.setTimeOut(30000);
         paramsMap.put("1",mtgAdSource);
 
 

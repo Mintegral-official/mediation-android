@@ -158,6 +158,9 @@ public class MediationRewardManager extends BaseManager{
 
                 @Override
                 public void loadFailed(String msg) {
+                    if(handler != null){
+                        handler.removeMessages(1);
+                    }
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                         loadAndSetTimeOut();
                     }else{

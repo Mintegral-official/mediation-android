@@ -111,8 +111,11 @@ public class MediationInterstitialManager extends BaseManager{
 
                 @Override
                 public void loadFailed(String msg) {
-                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
+                    if(handler != null){
+                        handler.removeMessages(1);
+                    }
 
+                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                         loadAndSetTimeOut();
                     }else{
                         loadFailedToUser(msg);
