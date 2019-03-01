@@ -19,18 +19,18 @@ public abstract class BaseAdapter {
     /**
      * request ads
      */
-    public abstract void load();
+    public abstract void load(String param);
 
     /**
      * show ads
      */
-    public abstract void show();
+    public abstract void show(String param);
 
     /**
      * check ads state
      * @return if the ads can show reture true, or false
      */
-    public abstract boolean isReady();
+    public abstract boolean isReady(String param);
 
     /**
      * set init state listener

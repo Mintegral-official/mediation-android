@@ -57,10 +57,10 @@ public class MediationInterstitialHandler extends BaseHandler{
      *
      */
     @Override
-    public void load() {
+    public void load(String param) {
         try {
             if (mediationInterstitialManager != null){
-                mediationInterstitialManager.load();
+                mediationInterstitialManager.load(param);
             } else{
                 if (mMediationAdapterInterstitialListener != null){
                     mMediationAdapterInterstitialListener.loadFailed(MediationMTGErrorCode.UNSPECIFIED);
@@ -78,10 +78,10 @@ public class MediationInterstitialHandler extends BaseHandler{
      * @return
      */
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         try {
             if (mediationInterstitialManager != null){
-                return mediationInterstitialManager.isReady();
+                return mediationInterstitialManager.isReady(param);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,10 +93,10 @@ public class MediationInterstitialHandler extends BaseHandler{
      *
      */
     @Override
-    public void show() {
+    public void show(String param) {
         try {
             if (mediationInterstitialManager != null){
-                mediationInterstitialManager.show();
+                mediationInterstitialManager.show(param);
             } else{
                 if (mMediationAdapterInterstitialListener != null){
                     mMediationAdapterInterstitialListener.showFailed(MediationMTGErrorCode.UNSPECIFIED);

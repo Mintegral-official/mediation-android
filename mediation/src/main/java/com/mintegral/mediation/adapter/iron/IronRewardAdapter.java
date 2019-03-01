@@ -81,7 +81,7 @@ public class IronRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public void show() {
+    public void show(String param) {
         if (TextUtils.isEmpty(mPlacementName)) {
             IronSource.showRewardedVideo();
         } else {
@@ -172,15 +172,15 @@ public class IronRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         return IronSource.isRewardedVideoAvailable();
     }
 
     @Override
-    public void load() {
+    public void load(String param) {
         if (!mIsFirstInitFlow) {
             if (mMediationAdapterRewardListener != null) {
-                if (isReady()) {
+                if (isReady(param)) {
                     mMediationAdapterRewardListener.loadSucceed();
                 } else {
                     mMediationAdapterRewardListener.loadFailed(MediationMTGErrorCode.NETWORK_NO_FILL);

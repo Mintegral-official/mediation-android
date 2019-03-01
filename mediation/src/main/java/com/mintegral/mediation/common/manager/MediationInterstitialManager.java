@@ -32,6 +32,12 @@ public class MediationInterstitialManager extends BaseManager{
     private WeakReference<Activity> activityWeakReference;
     private String mMediationUnitId;
     private AdSource currentAdSource;
+    private String currentLoadParam;
+
+    @Override
+    public String getCurrentLoadParam() {
+        return currentLoadParam;
+    }
 
     private boolean loadHadResult = false;
     private Handler handler = new TimerHandler(this);
@@ -116,7 +122,7 @@ public class MediationInterstitialManager extends BaseManager{
                     }
 
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                        loadAndSetTimeOut();
+                        loadAndSetTimeOut(currentLoadParam);
                     }else{
                         loadFailedToUser(msg);
                     }
@@ -212,17 +218,18 @@ public class MediationInterstitialManager extends BaseManager{
      * 加载数据
      */
     @Override
-    public void load(){
+    public void load(String param){
         loadHadResult = false;
+        currentLoadParam=param;
         if(activityWeakReference == null || activityWeakReference.get() == null){
             loadFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(interstitialAdapter != null ){
-            loadAndSetTimeOut();
+            loadAndSetTimeOut(param);
         }else{
             if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                loadAndSetTimeOut();
+                loadAndSetTimeOut(param);
             }else{
                 loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
             }
@@ -234,12 +241,12 @@ public class MediationInterstitialManager extends BaseManager{
      * @return if can show reture true, or false
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady(String param){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
         }
         if(interstitialAdapter != null ){
-            return interstitialAdapter.isReady();
+            return interstitialAdapter.isReady(param);
         }
         return false;
     }
@@ -248,13 +255,13 @@ public class MediationInterstitialManager extends BaseManager{
      * 展示广告
      */
     @Override
-    public void show(){
+    public void show(String param){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(interstitialAdapter != null ){
-            interstitialAdapter.show();
+            interstitialAdapter.show(param);
         }else{
             showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
         }
@@ -290,23 +297,23 @@ public class MediationInterstitialManager extends BaseManager{
     }
 
     @Override
-    public void loadTimeout(){
+    public void loadTimeout(String param){
         //清空上个adapter的监听
         if(interstitialAdapter != null){
             interstitialAdapter.setSDKInterstitial(null);
         }
 
         if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-            loadAndSetTimeOut();
+            loadAndSetTimeOut(param);
         }else{
             loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);
         }
 
     }
 
-    private void loadAndSetTimeOut(){
+    private void loadAndSetTimeOut(String param){
         if (interstitialAdapter != null) {
-            interstitialAdapter.load();
+            interstitialAdapter.load(param);
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
             }

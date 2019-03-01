@@ -29,18 +29,18 @@ public abstract class BaseHandler {
     /**
      * it will load ads
      */
-    public abstract void load();
+    public abstract void load(String param);
 
     /**
      * check ads state
      * @return if ads can show will return true,other false
      */
-    public abstract boolean isReady();
+    public abstract boolean isReady(String param);
 
     /**
      * it will show ads
      */
-    public abstract void show();
+    public abstract void show(String param);
 
     /**
      * get adapter's lifecycleListener

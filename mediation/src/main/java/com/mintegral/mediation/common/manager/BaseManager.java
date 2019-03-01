@@ -12,12 +12,13 @@ public abstract class BaseManager {
 
     abstract void init(Activity activity, String mediationUnitId, Map<String,Object> localParams);
     abstract void setMediationAdapterInitListener(MediationAdapterInitListener mediationAdapterInitListener);
-    abstract void load();
-    abstract boolean isReady();
-    abstract void show();
+    abstract void load(String param);
+    abstract boolean isReady(String param);
+    abstract void show(String param);
     abstract LifecycleListener getLifecycleListener();
-    public abstract void loadTimeout();
+    public abstract void loadTimeout(String param);
     public abstract boolean isLoadHadResult();
     abstract void setInterceptor(BaseInterceptor interceptor);
     abstract void callInitListener(boolean succeed);
+    public abstract String getCurrentLoadParam();
 }

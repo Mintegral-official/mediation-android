@@ -38,10 +38,10 @@ public class MediationRewardVideoHandler extends BaseHandler{
     }
 
     @Override
-    public void load() {
+    public void load(String param) {
         try {
             if(mMediationRewardManager != null){
-                mMediationRewardManager.load();
+                mMediationRewardManager.load(param);
             }else{
                 if(mMediationAdapterRewardListener != null){
                     mMediationAdapterRewardListener.loadFailed(MediationMTGErrorCode.UNSPECIFIED);
@@ -55,10 +55,10 @@ public class MediationRewardVideoHandler extends BaseHandler{
     }
 
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         try {
             if(mMediationRewardManager != null){
-                return mMediationRewardManager.isReady();
+                return mMediationRewardManager.isReady(param);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,10 +67,10 @@ public class MediationRewardVideoHandler extends BaseHandler{
     }
 
     @Override
-    public void show() {
+    public void show(String param) {
         try {
             if(mMediationRewardManager != null){
-                mMediationRewardManager.show();
+                mMediationRewardManager.show(param);
             }else{
                 if(mMediationAdapterRewardListener != null){
                     mMediationAdapterRewardListener.showFailed(MediationMTGErrorCode.UNSPECIFIED);

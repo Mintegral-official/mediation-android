@@ -62,7 +62,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     }
 
     @Override
-    public void load() {
+    public void load(String param) {
         if (IronSource.isISDemandOnlyInterstitialReady(mInstanceId)) {
             onInterstitialAdReady(mInstanceId);
         } else {
@@ -72,7 +72,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
 
     @Override
-    public void show() {
+    public void show(String param) {
         try {
             if (IronSource.isISDemandOnlyInterstitialReady(mInstanceId)) {
                 if (TextUtils.isEmpty(mPlacementName)) {
@@ -92,7 +92,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
 
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         return IronSource.isISDemandOnlyInterstitialReady(mInstanceId);
     }
 

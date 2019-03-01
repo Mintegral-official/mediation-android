@@ -13,9 +13,9 @@ public class TimerHandler extends Handler {
 
     private WeakReference<BaseManager> managerWeakReference;
 
-    public TimerHandler(BaseManager mediationRewardManager){
+    public TimerHandler(BaseManager mediationManager){
         super();
-        managerWeakReference = new WeakReference<BaseManager>(mediationRewardManager);
+        managerWeakReference = new WeakReference<BaseManager>(mediationManager);
 
     }
 
@@ -29,10 +29,10 @@ public class TimerHandler extends Handler {
             case 1:
 
                 if (managerWeakReference != null) {
-                    BaseManager mediationRewardManager = managerWeakReference.get();
-                    if (mediationRewardManager != null) {
-                        if (!mediationRewardManager.isLoadHadResult()) {
-                            mediationRewardManager.loadTimeout();
+                    BaseManager mediationManager = managerWeakReference.get();
+                    if (mediationManager != null) {
+                        if (!mediationManager.isLoadHadResult()) {
+                            mediationManager.loadTimeout(mediationManager.getCurrentLoadParam());
                         }
                     }
                 }

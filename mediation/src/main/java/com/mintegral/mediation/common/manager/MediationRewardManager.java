@@ -32,7 +32,12 @@ public class MediationRewardManager extends BaseManager{
     private AdSource currentAdSource;
     private boolean loadHadResult = false;
     private  Handler handler = new TimerHandler(this) ;
+    private String currentLoadParam;
 
+    @Override
+    public String getCurrentLoadParam() {
+        return currentLoadParam;
+    }
 
     /**
      * 初始化sdk
@@ -162,7 +167,7 @@ public class MediationRewardManager extends BaseManager{
                         handler.removeMessages(1);
                     }
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                        loadAndSetTimeOut();
+                        loadAndSetTimeOut(currentLoadParam);
                     }else{
                         loadFailedToUser(msg);
                     }
@@ -217,18 +222,18 @@ public class MediationRewardManager extends BaseManager{
      * load方法，用于加载数据
      */
     @Override
-    public void load(){
-
+    public void load(String param){
+        currentLoadParam = param;
         loadHadResult = false;
         if(activityWeakReference == null || activityWeakReference.get() == null){
             loadFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(rewardAdapter != null ){
-            loadAndSetTimeOut();
+            loadAndSetTimeOut(param);
         }else{
             if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                loadAndSetTimeOut();
+                loadAndSetTimeOut(param);
             }else{
                 loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
             }
@@ -239,13 +244,13 @@ public class MediationRewardManager extends BaseManager{
      * 展示广告
      */
     @Override
-    public void show(){
+    public void show(String param){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             showFailedToUser(MediationMTGErrorCode.ACTIVITY_IS_NULL);
             return;
         }
         if(rewardAdapter != null ){
-            rewardAdapter.show();
+            rewardAdapter.show(param);
         }else{
             showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
         }
@@ -257,12 +262,12 @@ public class MediationRewardManager extends BaseManager{
      * @return if can show reture true, or false
      */
     @Override
-    public boolean isReady(){
+    public boolean isReady(String param){
         if(activityWeakReference == null || activityWeakReference.get() == null){
             return false;
         }
         if(rewardAdapter != null ){
-            return rewardAdapter.isReady();
+            return rewardAdapter.isReady(param);
         }
         return false;
     }
@@ -298,23 +303,23 @@ public class MediationRewardManager extends BaseManager{
     }
 
     @Override
-    public void loadTimeout(){
+    public void loadTimeout(String param){
         //清空上个adapter的监听
         if(rewardAdapter != null){
             rewardAdapter.setSDKRewardListener(null);
         }
 
         if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-            loadAndSetTimeOut();
+            loadAndSetTimeOut(param);
         }else{
             loadFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_TIMEOUT);
         }
 
     }
 
-    private void loadAndSetTimeOut(){
+    private void loadAndSetTimeOut(String param){
         if (rewardAdapter != null) {
-            rewardAdapter.load();
+            rewardAdapter.load(param);
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
             }

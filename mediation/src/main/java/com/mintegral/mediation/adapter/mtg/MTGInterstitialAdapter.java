@@ -79,14 +79,14 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     }
 
     @Override
-    public void load() {
+    public void load(String param) {
         mMTGInterstitalVideoHandler.setInterstitialVideoListener(mInterstitialVideoListener);
         mMTGInterstitalVideoHandler.load();
         mMTGInterstitalVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
     }
 
     @Override
-    public void show() {
+    public void show(String param) {
         if (isReady) {
             //判断isReady状态，如果为true且ready的时间超过1小时，则置为false
             long time = System.currentTimeMillis() - loadSucessTime;
@@ -104,7 +104,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     }
 
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         if (isReady) {
             long time = System.currentTimeMillis() - loadSucessTime;
             isReady = time < 3600000 && isReady;

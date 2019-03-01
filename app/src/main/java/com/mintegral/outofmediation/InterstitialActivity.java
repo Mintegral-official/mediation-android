@@ -134,17 +134,17 @@ public class InterstitialActivity extends Activity implements View.OnClickListen
                 break;
             case R.id.reward_load:
                 if (mediationInterstitialHandler != null) {
-                    mediationInterstitialHandler.load();
+                    mediationInterstitialHandler.load("");
                 }
                 break;
             case R.id.reward_show:
                 if (mediationInterstitialHandler != null) {
-                    mediationInterstitialHandler.show();
+                    mediationInterstitialHandler.show("");
                 }
                 break;
             case R.id.reward_is_ready:
                 if (mediationInterstitialHandler != null) {
-                    Toast.makeText(InterstitialActivity.this,"ready:"+mediationInterstitialHandler.isReady(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(InterstitialActivity.this,"ready:"+mediationInterstitialHandler.isReady(""),Toast.LENGTH_LONG).show();
                 }
                 break;
             default:

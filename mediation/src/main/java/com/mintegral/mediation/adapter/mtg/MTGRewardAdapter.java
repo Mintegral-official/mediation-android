@@ -100,7 +100,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public void show() {
+    public void show(String param) {
         if (mMTGRewardVideoHandler != null && mMTGRewardVideoHandler.isReady()) {
             if (TextUtils.isEmpty(mUserId)) {
                 mMTGRewardVideoHandler.show(mRewardId);
@@ -116,14 +116,14 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     }
 
     @Override
-    public void load() {
+    public void load(String param) {
         mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
         mMTGRewardVideoHandler.load();
         mMTGRewardVideoHandler.playVideoMute(isMute ? MIntegralConstans.REWARD_VIDEO_PLAY_MUTE : MIntegralConstans.REWARD_VIDEO_PLAY_NOT_MUTE);
     }
 
     @Override
-    public boolean isReady() {
+    public boolean isReady(String param) {
         return mMTGRewardVideoHandler.isReady();
     }
 

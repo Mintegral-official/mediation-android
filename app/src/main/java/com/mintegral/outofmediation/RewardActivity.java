@@ -149,17 +149,17 @@ public class RewardActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.reward_load:
                 if (mediationRewardVideoHandler != null) {
-                    mediationRewardVideoHandler.load();
+                    mediationRewardVideoHandler.load("");
                 }
                 break;
             case R.id.reward_show:
                 if (mediationRewardVideoHandler != null) {
-                    mediationRewardVideoHandler.show();
+                    mediationRewardVideoHandler.show("");
                 }
                 break;
             case R.id.reward_is_ready:
                 if (mediationRewardVideoHandler != null) {
-                    Toast.makeText(RewardActivity.this, "ready:" + mediationRewardVideoHandler.isReady(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(RewardActivity.this, "ready:" + mediationRewardVideoHandler.isReady(""), Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
