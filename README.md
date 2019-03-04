@@ -1,42 +1,40 @@
 
-# Mintegral聚合集成指南（Android）
+# Mediation Integration Guide (Android)
+[Chinese Document](./docs/index_cn.md)
 
-## 概要
+## Overview    
 
-    
-本文档介绍了Android开发者如何通过Mintegral聚合其他第三方的广告SDK，目前仅支持聚合ironsource的Rewarded Video、Interstitial，其中Interstitial对应Mintegral的Interstitial Video。
- 
+This document describes to Android developers how to aggregate other third-parties' ad SDK, through Mintegral. 
+Currently, we only support aggregation of ironSource's Rewarded Video and Interstitial ad formats; ironSource's Interstitial ad corresponds to Mintegral's Interstitial Video.
 
-## 配置Mintegral
-### 获取账户信息    
+## Mintegral Settings
 
-**App Key**   
+### Retrieve account-related information
 
-开发者每个账号都有对应的App Key，请求广告时需要用到该参数，它可以从Mintegral开发者后台获取，在**APP Setting -> App Key**界面，可以查看到该账号的App Key，如图所示：  
-![](https://github.com/Vivi012/MTG/blob/master/apikey.png?raw=true) 
+**APP Key**   
+Each Mintegral account has a corresponding App Key, and the key will be needed for requesting ads. It can be retreived from your Mintegral account through the following path: **APP Setting -> App Key**:  
+![](./docs/apikey.png)
 
-**App Id**        
+**App ID**   
+The M-system will automatically generate a corresponding App ID for each app created by the developer. Find the App ID(s)  here: **APP Setting -> APP ID**:  
+![](./docs/appid.png)
 
-开发者每创建一个应用后，系统会自动生成App Id，可在**APP Setting -> App Id**界面查看到已创建的应用以及对应的App Id，如图所示：  
-![](https://github.com/Vivi012/MTG/blob/master/appid.png?raw=true)    
-
-**Unit Id**       
-
-开发者每创建一个广告位后，系统会自动生成Unit Id，可在**APP Setting -> AD Unit -> AD Unit Id**界面查看到已创建的广告位以及对应的Unit Id，如图所示：  
-![](https://github.com/Vivi012/MTG/blob/master/unitid.png?raw=true)   
-
-### 获取SDK
-
-[点击下载](http://cdn-adn.rayjump.com/cdn-adn/v2/portal/19/02/22/11/49/5c6f715dba0c6.zip)最新版本的国内版本9.8.0 
-
-[点击下载](http://cdn-adn.rayjump.com/cdn-adn/v2/portal/19/02/22/11/49/5c6f7156c5290.zip)最新版本的非国内版本9.8.0  
+**Unit ID**  
+The M-system will automatically generate a corresponding Unit ID for each ad space created by the developer. Find the Unit ID here: **Login to M-system —> App Setting—>  Ad Unit —> Ad Unit ID** :  
+![](./docs/unitid.png)
 
 
-### 将Mintegral SDK添加至您的项目   
+###  Obtain the SDK
 
-**通过JAR/AAR包集成**     
-#### Interstitial需要导入以下文件
+[Click here ](http://cdn-adn.rayjump.com/cdn-adn/v2/portal/19/02/22/11/49/5c6f715dba0c6.zip) to download the latest version (9.8.0) of the Mintegral SDK for China.   
 
+[Click here](http://cdn-adn.rayjump.com/cdn-adn/v2/portal/19/02/22/11/49/5c6f7156c5290.zip)  to download the latest version (9.8.0) of the Mintegral SDK.     
+
+**Add the Mintegral SDK(s) to your project**`
+
+**Integrate via JAR/AAR package**
+
+#### Required Files for Interstitial 
 mintegral_alphab.aar<br>
 mintegral_common.aar/mintegral_chinacommon.aar<br>
 mintegral_intersitialvideo.aar<br>
@@ -46,11 +44,9 @@ mintegral_playercommon.aar<br>
 mintegral_reward.aar<br>
 mintegral_mtgjscommon.aar<br>
 mintegral_mtgdownloads.aar<br>
-或者对应的jar包和res文件。  
+or jar with their res file.
 
-
-
-#### Rewarded Video需要导入以下文件
+#### Required Files for Rewarded Video
 
 mintegral_alphab.aar<br>
 mintegral_common.aar/mintegral_chinacommon.aar<br>
@@ -60,27 +56,26 @@ mintegral_videojs.aar<br>
 mintegral_playercommon.aar<br>
 mintegral_mtgjscommon.aar<br>
 mintegral_mtgdownloads.aar<br>
-或者对应的jar包和res文件。  
+or jar with their res file.
 
 
 
-### AndroidManifest.xml 配置
+###  AndroidManifest.xml Configuration
 
-1、必要权限 
+1.Required permission 
 
-**注：如果使用了国内版的SDK ，“READ_PHONE_STATE”此条权限必须加上,如果是Android系统6.0以上，需要动态申请此权限。**   
+**If you imported the  SDK for China-mainland , then you are required to get permission for the term "READ_PHONE_STATE". If your Android system is version 6.0 or above, you need to apply for the permission in your java code.**     
 
 ```java
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-    <!-- 如果是国内版本SDK ，则此条权限必须加上 -->
+    <!-- Required for the Mintegral SDK in China -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 ```
 
-
-2、非必要权限
+2.Optional permission
 
 ```java
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -88,23 +83,21 @@ mintegral_mtgdownloads.aar<br>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-3、添加组件 
+3.Component
 
 ```xml
     <activity
-            android:name="com.mintegral.msdk.activity.MTGCommonActivity"
-            android:configChanges="keyboard|orientation"
-            android:screenOrientation="portrait"
-            android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+	android:name="com.mintegral.msdk.activity.MTGCommonActivity"
+	android:configChanges="keyboard|orientation"
+	android:screenOrientation="portrait"
+	android:exported="true"
+	android:theme="@android:style/Theme.Translucent.NoTitleBar">
     </activity>
     
-    
-    <activity
+        <activity
             android:name="com.mintegral.msdk.reward.player.MTGRewardVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-    
 
     <receiver android:name="com.mintegral.msdk.click.AppReceiver" >
         <intent-filter>
@@ -120,13 +113,12 @@ mintegral_mtgdownloads.aar<br>
 ```
 
 
-4、下载器适配  
- 
+4.Downloader adaptation   
 
-（1）**将Android Support v4包升级到26.0.0或以上。**
+(1) **Update the Android Support v4 to 26.0.0 or above.**
 
-（2）**如果targetSDKVersion >= 24，需要适配FileProvider。**  
-   在xml文件下添加mtg_provider_paths.xml
+(2) **Adapt the FileProvider if the targetSDKVersion >= 24.**   
+Add these codes in mtg_provider_paths.xml
 
 ```xml
 	<?xml version="1.0" encoding="utf-8"?>
@@ -134,28 +126,24 @@ mintegral_mtgdownloads.aar<br>
 	 <external-path name="external_files" path="."/>
 	</paths>
 ```
-
-   在AndroidManifest.xml文件中添加如下代码  
-
+Add these codes in AndroidManifest.xml
 
 ```xml
-	      <provider
-              android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
-              android:authorities="${applicationId}.mtgFileProvider"
-              android:exported="false"
-              android:grantUriPermissions="true">
+	<provider
+            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
+            android:authorities="${applicationId}.mtgFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-              android:name="android.support.FILE_PROVIDER_PATHS"
-              android:resource="@xml/mtg_provider_paths"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/mtg_provider_paths"/>
         </provider>
 ```
 
+5.Hardware acceleration      
+Add these codes "android:hardwareAccelerated=ture" in application tab：
 
-
-5、硬件加速   
-在application节点下修改"android:hardwareAccelerated"的属性值：
-
-```xml
+```java
 <application
         ...
         android:hardwareAccelerated="true">
@@ -167,9 +155,7 @@ mintegral_mtgdownloads.aar<br>
 </application>
 ```
 
-
-
-6、混淆配置
+6.Code obfuscation configuration
 
 ```java
     -keepattributes Signature   
@@ -183,47 +169,48 @@ mintegral_mtgdownloads.aar<br>
     -keep interface com.alphab.** {*; }
 ```
 
-7、Android9.0兼容注意事项   
+7.Android 9.0 compatibility considerations  
 
-**目前Android SDK暂不支持Android9.0以上操作系统，如果在Android9.0以上系统出现的崩溃，可以通过以下两个方法之一解决。**    
-（1）在AndroidManifest.xml中添加以下内容：  
+**Currently, the Android SDK does not support Android 9.0 or above. If the app crashes under Android 9.0 or above, you can choose one of the two solutions below.**
+
+(1) Add these codes in AndroidManifest.xml:  
 
 ```xml
 <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 ```
-（2）将targaetSDKveriosn设置为27或者27以下。  
-  
+(2)Set the targaetSDKveriosn to 27 or below.    
 
 
-## 配置ironsource
 
-### 创建账号
-####  [注册](https://platform.ironsrc.com/partners/signup)并[登录](https://platform.ironsrc.com/partners/tour)您的ironSource帐户。     
-#### 创建App 
-要将您的应用程序添加到ironSource dashboard，请单击**New App** 按钮。
+## ironSource Settings
 
-![](https://github.com/Vivi012/MTG/blob/master/ir1.png?raw=true)
+### Create your account
+#### [Sign up](https://platform.ironsrc.com/partners/signup)and[sign in](https://platform.ironsrc.com/partners/tour)to your ironSource account.     
+#### Create new app 
+To add your application to the ironSource dashboard, click the **New App** button.
 
-#### 进入应用详情
+![](./docs/ir1.png)
 
-选择**Mobile App**，输入**应用的Google Play URL**，然后点击**Import App Info**。显示应用信息后，单击**Add App**按钮。
 
-如果您的应用程序不可用，请选择 **App Not Live in the Application Store**并提供**Temporary Name**。选择Android平台，然后单击**Add App**。
+### Enter app details
 
-![](https://github.com/Vivi012/MTG/blob/master/ir2.png?raw=true)
+Select **Mobile App**, enter the **Google Play URL** of your app, and click **Import App Info**. Once your app information is displayed, click the **Add App** button.
 
-####  广告位配置
-记录下您添加应用后得到的**App Key**，初始化SDK时会用到此值。并在此处设置您所需要的广告形式状态，然后单击**Done**。
+If your app is not available, select **App Not Live in the Application Store** and provide a **Temporary Name** for your app. Select Android as **platform** and click **Add App**.
+
+![](./docs/ir2.png)
+
+
+#### Unit Setting
+Take note of your new **App Key**, This value will be used when loading ads. Select the ad formats your app supports in the appropriate tabs. Then click **Done**.
 ![](https://developers.google.com/admob/images/mediation/ironsource/ad_format_select_android.png)
 
+### Integrating ironSource 
+reference link: [ironsource Integration Guide](https://developers.ironsrc.com/ironsource-mobile/android/android-sdk/)
 
-###  集成ironsource
+#### Import ironSource SDK
 
-[ironsource集成文档]()参考链接。
-
-#### 导入ironsource文件
-
-1、在build.gradle文件中加入
+Add the following ironSource Maven repository and implementation dependency with the latest version of the ironSource SDK and adapter in the app-level build.gradle file:
 
 ```java
 repositories {
@@ -231,17 +218,14 @@ repositories {
         url "https://dl.bintray.com/ironsource-mobile/android-sdk"
    }
 }    
-```
-2、然后在dependencies中添加   
+ 
 
-```java
 dependencies {
-
-  implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar' 
+implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar' 
 
 }
 ```
-#### 配置AndroidManifest.xml 
+#### Modify Android Manifest 
 
 ```java
  <activity
@@ -260,7 +244,7 @@ dependencies {
             android:theme="@android:style/Theme.Translucent" 
 />
 ```
-#### ironsource混淆配置
+#### Code Obfuscation Configuration
 
 ```java
 -keepclassmembers class com.ironsource.sdk.controller.IronSourceWebView$JSInterface {
@@ -281,35 +265,37 @@ dependencies {
 ```
 
 
-### 导入Adapter文件
-点击[这里]()中获取Mediation包，并将其中的全部文档拷贝到您的项目中。
+### Import Adapter 
+Click [here](https://github.com/Mintegral-official/mediation-android/tree/master/mediation/src/main/java/com/mintegral/mediation)to get the mediation package and copy all the files to your project.
 
-## Interstitial接入
-###  初始化
-####  创建MediationInterstitialHandler对象
 
+## Interstitial
+
+### Init Interstitial
+
+#### Create MediationInterstitialHandler
 ```java
 manager = new MediationInterstitialHandler();
-```   
-
-#### 设置MediationAdapterInitListener 
-需要在初始化前调用
+```
+#### Set MediationAdapterInitListener 
+The below needs to be called before initialization.
 
 ```java
       manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
-           /**
-           * 初始化成功
-           */
-           
+      
+	    /**
+	     * Called after the interstitial init success
+	     */
+	     
             @Override
             public void onInitSucceed() {
                 Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
                 Log.e("interstitial","onInitSucceed");
             }
             
-           /**
-           * 初始化失败
-           */
+	    /**
+	     * Called after the interstitial init failed
+	     */
 
             @Override
             public void onInitFailed() {
@@ -319,49 +305,53 @@ manager = new MediationInterstitialHandler();
         });
 ```
 
-#### 调用init方法 
+#### Call init method 
 
-初始化时需要在Map中配置广告id，Adapter路径及超时时间等参数。
-   
-示例代码：
+You should configure parameters such as ad ID, adapter absolute path and timeout sesion in Map when initializing.       
+
+Sample code:
 
 ```java
+	/**
+         * @param setTargetClass,There need fill adapter path.		
+         * @param TimeOut,load ad timeout
+         * @param ("1",mtgAdSource),Set the priority of the ads,"1" is the first call, and the default priority is to request the MTG ads. 
+         */
+
 	Map<String,Object> paramsMap = new HashMap<>();
         //IronSource
         AdSource adSource = new AdSource();
         Map<String,Object> ironsourceMap = new HashMap<>();
-        ironsourceMap.put("local","88f1a7f5");//该值为ironsource的AppKey.
+        ironsourceMap.put("local","88f1a7f5");//set ironsource AppKey.
         adSource.setLocalParams(ironsourceMap);
-        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");//这里的Adapter路径要对应您项目中该文件的全路径
-        adSource.setTimeOut(10000);//请求广告超时时间
-        paramsMap.put("2",adSource);//设置广告优先级，1为优先展示，默认优先请求Mintegral广告。
-
+        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronInterstitialAdapter");     
+		adSource.setTimeOut(10000);
+		paramsMap.put("2",adSource);
         //Mintegral
         Map<String,Object> map = new HashMap<>();
         AdSource mtgAdSource = new AdSource();
         map.put(CommonConst.KEY_APPID, "your AppId");
         map.put(CommonConst.KEY_APPKEY, "your AppKey");
         map.put(CommonConst.KEY_INTERSTITIALUNITID, "your unitId");
-        map.put(CommonConst.KEY_MUTE, false);//是否静音，默认为非静音
+        map.put(CommonConst.KEY_MUTE, false);//Whether to mute, the default is non-mute.
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGInterstitialAdapter");
         mtgAdSource.setTimeOut(10000);
         paramsMap.put("1",mtgAdSource);
-        
- 	 /**
-         * 初始化
-         */
-	 manager.init(this,paramsMap);   
- 
+
+        /**
+         * init Interstitial
+         */        
+	manager.init(this,paramsMap);
+
 ```
 
-#### 设置MediationAdapterInterstitialListener
+#### Set MediationAdapterInterstitialListener
 ```java
+manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
 
-      manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
-      
 	    /**
-	     * 加载广告成功
+	     * invoked when there is an interstitial has been loaded.
 	     */
 	     
             @Override
@@ -370,16 +360,15 @@ manager = new MediationInterstitialHandler();
             }
 	    
             /**
-	     * 加载广告失败
+	     * invoked when there is no Interstitial Ad available after calling load function.
 	     */
 
             @Override
             public void loadFailed(String msg) {
                 Toast.makeText(InterstitialActivity.this,"loadFailed:"+msg,Toast.LENGTH_LONG).show();
-	    }
-	    
+		
             /**
-	     * 展示广告成功
+	     *  Invoked when the ad was opened and shown successfully.
 	     */
 
             @Override
@@ -388,7 +377,7 @@ manager = new MediationInterstitialHandler();
             }
             
 	     /**
-	     * 展示广告失败
+	     * Invoked when Interstitial ad failed to show. the msg which represents the reason of showInterstitial failure.
 	     */
 
             @Override
@@ -397,7 +386,7 @@ manager = new MediationInterstitialHandler();
             }
 	    
             /**
-	     * 点击广告
+	     * Invoked when the end user clicked on the interstitial ad.
 	     */
 
             @Override
@@ -406,7 +395,7 @@ manager = new MediationInterstitialHandler();
             }
 	    
             /**
-	     * 关闭广告
+	     *  Invoked when the ad is closed and the user is about to return to the application.
 	     */
 
             @Override
@@ -416,14 +405,14 @@ manager = new MediationInterstitialHandler();
 
         });
 ```
-#### 获取Activity生命周期的监听
-ironsource要求需要调用该方法。
+
+#### Get the Activity LifecycleListener
+ironSource requires calling the below method.
 
 ```java
-
-  lifecycleListener = manager.getLifecycleListener();
+lifecycleListener = manager.getLifecycleListener();
 ```
-在Activity的生命周期中调用其中方法。     
+You can call these methods during Activity's lifecycle.    
        
 ```java
 
@@ -445,69 +434,55 @@ ironsource要求需要调用该方法。
 ```
 
 
-### 加载广告
-建议开发者在展示广告之前，提前进行广告加载（如初始化时或每次关闭广告后），进而给素材等资源的下载提供时间，减少用户在展示广告时等待的时间，提高用户体验和广告时间。    
+### Load Ads
+It is recommended that developers preload ads before displaying them (either during initialization or each time after closing an ad). This way, it allows more time for the creative to download and also decreases the amount of wait time for users to see an ad. Use the below method to load and show ads.  
 
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
-                if (mediationInterstitialHandler != null) {
-                    mediationInterstitialHandler.load("");
+                if (manager != null) {
+                    manager.load();
                 }
 ```
-### 展示广告
+### Show Ads
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
-                if (mediationInterstitialHandler != null) {
-                    mediationInterstitialHandler.show("");
+                if (manager != null) {
+                    manager.show();
                 }
 ```
-### 判断广告是否可播放
-返回boolean值。    
+### Check An Ads Availability
+A Boolean value will be returned.    
 
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
- 		if (mediationInterstitialHandler != null) {
-                    mediationInterstitialHandler.isReady("");
-                }
+manager.isReady();
 ```
 
 
 
-## Rewarded Video接入
+## Rewarded Video
 
-### 初始化
-#### 创建一个MediationRewardVideoHandler对象
-
+### Init RewardedVideo
+#### Create a MediationRewardVideoHandler
 ```java
-  	manager = new MediationRewardVideoHandler();
+manager = new MediationRewardVideoHandler();
 ```
-
-#### 设置MediationAdapterInitListener 
-需要在初始化前调用
+#### Set MediationAdapterInitListener 
+The below needs to be called before initialization.
 
 ```java
-      	manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
-           /**
-           * 初始化成功
-           */
+      manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
+      
+	/**
+	 * Called after the interstitial init success
+	 */
+		
             @Override
             public void onInitSucceed() {
                 Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
                 Log.e("interstitial","onInitSucceed");
             }
             
-           /**
-           * 初始化失败
-           */
+     /**
+      * Called after the interstitial init failed
+      */
 
             @Override
             public void onInitFailed() {
@@ -516,50 +491,61 @@ ironsource要求需要调用该方法。
             }
         });
 ```
-#### 调用init方法 
 
 
-初始化时需要在Map中配置广告id，Adapter路径及超时时间等参数。         
-示例代码：
+
+#### Call the init method
+
+You should configure parameters such as ad ID, adapter absolute path and timeout sesion in Map when initializing.   
+
+Sample code:
 
 ```java
+	/**
+         * @param setTargetClass,There need fill adapter path.		
+         * @param TimeOut,load ad timeout
+         * @param ("1",mtgAdSource),Set the priority of the ads,"1" is the first call, and the default priority is to request the MTG ads. 
+         */
+
 	Map<String,Object> paramsMap = new HashMap<>();
         //IronSource
         AdSource adSource = new AdSource();
         Map<String,Object> ironsourceMap = new HashMap<>();
-        ironsourceMap.put("local","88f1a7f5");//该值为ironsource的AppKey.
+        ironsourceMap.put("local","88f1a7f5");//set ironsource AppKey.
         adSource.setLocalParams(ironsourceMap);
-        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronRewardAdapter");//这里的Adapter路径要对应您项目中该文件的全路径
-        adSource.setTimeOut(10000);//请求广告超时时间
-        paramsMap.put("2",adSource);//设置广告优先级，1为优先展示，默认优先请求Mintegral广告。
-
+        adSource.setTargetClass("com.mintegral.mediation.adapter.iron.IronRewardAdapter");        
+        adSource.setTimeOut(10000);
+        paramsMap.put("2",adSource);
+	
         //Mintegral
         Map<String,Object> map = new HashMap<>();
         AdSource mtgAdSource = new AdSource();
         map.put(CommonConst.KEY_APPID, "your AppId");
         map.put(CommonConst.KEY_APPKEY, "your AppKey");
         map.put(CommonConst.KEY_REWARDUNITID, "your unitId");
-        map.put(CommonConst.KEY_USERID, "your userId");////userId在服务器回调中用到
-        map.put(CommonConst.KEY_REWARDID, "your rewardId");//rewardId默认可以传1
+        map.put(CommonConst.KEY_USERID, "your userId");//User ID，set by developer
+        map.put(CommonConst.KEY_REWARDID, "your rewardId");//set rewardId as 1 by default
         map.put(CommonConst.KEY_MUTE, false);
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
+
         mtgAdSource.setTimeOut(20000);
         paramsMap.put("1",mtgAdSource);
-
- 	 /**
-         * 初始化
-         */ 
-	 manager.init(this,paramsMap);
+        
+        /**
+         * init RewaredVideo
+         */        
+        
+	manager.init(this,paramsMap);
 
 ```
 
-#### 设置MediationAdapterRewardListener
-```java
 
-    manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
+### Set MediationAdapterRewardListener
+```java
+manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
 	    /**
-	     * 加载广告成功
+	     * Invoked when there is an interstitial has been loaded.	
 	     */
 
             @Override
@@ -567,8 +553,8 @@ ironsource要求需要调用该方法。
                 Toast.makeText(RewardActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
             }
 
-	    /**
-	     * 加载广告失败
+            /**
+	     * Invoked when there is no Interstitial Ad available after calling load function.
 	     */
 
             @Override
@@ -577,7 +563,7 @@ ironsource要求需要调用该方法。
             }
 	    
             /**
-	     * 展示广告成功
+	     * Invoked when the ad was opened and shown successfully.
 	     */
 
             @Override
@@ -586,7 +572,7 @@ ironsource要求需要调用该方法。
             }
 	    
             /**
-	     * 展示广告失败
+	     * Invoked when Interstitial ad failed to show. the msg which represents the reason of showInterstitial failure.
 	     */
 
             @Override
@@ -595,7 +581,7 @@ ironsource要求需要调用该方法。
             }
 	    
             /**
-	     * 点击广告
+	     * Invoked when the end user clicked on the interstitial ad.
 	     */
 
             @Override
@@ -603,9 +589,9 @@ ironsource要求需要调用该方法。
                 Toast.makeText(RewardActivity.this,"clicked:"+msg,Toast.LENGTH_LONG).show();
             }
 	    
-             /**
-	      * 关闭广告
-	      */
+            /**
+	     * Invoked when the ad is closed and the user is about to return to the application.
+	     */
 
             @Override
             public void closed() {
@@ -613,7 +599,7 @@ ironsource要求需要调用该方法。
             }
 	    
             /**
-	     * 奖励回调
+	     * Invoked when the user completed the video and should be rewarded.
 	     */
 
 
@@ -623,13 +609,13 @@ ironsource要求需要调用该方法。
             }
         });
 ```
-#### 获取Activity生命周期的监听
-ironsource要求需要调用该方法。
+#### Get the Activity LifecycleListener
+ironSource requires calling the below method.      
 
 ```java
-   lifecycleListener = manager.getLifecycleListener();
+lifecycleListener = manager.getLifecycleListener();
 ```
-在Activity的生命周期中调用其中方法。     
+You can called these methods in the Activity's lifecycle    
        
 ```java
 
@@ -651,51 +637,37 @@ ironsource要求需要调用该方法。
 ```
 
 
-
-### 加载广告
-建议开发者在展示广告之前，提前进行广告加载（如初始化时或每次关闭广告后），进而给素材等资源的下载提供时间，减少用户在展示广告时等待的时间，提高用户体验和广告时间。    
+### Load Ads
+It is recommended that developers preload ads before displaying them (either during initialization or each time an ad closes). This way, it allows more time for the creative  to download and also decreases the amount of wait time for users to see an ad. Use the below method to load and show ads.    
 
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
-                if (mediationRewardVideoHandler != null) {
-                    mediationRewardVideoHandler.load("");
+                if (manager != null) {
+                    manager.load();
                 }
 ```
-### 展示广告   
+### Show Ads
 
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
-                if (mediationRewardVideoHandler != null) {
-                    mediationRewardVideoHandler.show("");
+                if (manager != null) {
+                    manager.show();
                 }
 ```
-### 判断广告是否可播放
-返回boolean值。     
+### Check An Ads Availability
+A Boolean value will be returned.       
 
 ```java
-                /**
-                 * @param 可置空
-                 */
-                 
-                if (mediationRewardVideoHandler != null) {
-                    mediationRewardVideoHandler.isReady("");
-                }
+manager.isReady();
 ```
 
 
 
-## 设置拦截器
-您可以重写BaseInterceptor，该拦截器的作用是设置SDK请求广告优先级，需要在init之前调用该方法。
+
+## Set Interceptor
+You can override the BaseInterceptor class, this interceptor is used to set up the SDK for requesting ad priority, which needs to be called before initialization.
 
 ```java
     /**
-     * 设置拦截器，如果不设置或设置为null，将使用默认
+     * Set the interceptor, if not set or set to null, the default will be used our DefaultRewardInterceptor.
      * @param interceptor
      */
      
@@ -705,8 +677,7 @@ ironsource要求需要调用该方法。
         }
     }
 ```
-
-示例代码：    
+sample code:     
 
 ```java
 
@@ -722,8 +693,8 @@ public class TestInterceptor extends BaseInterceptor {  
                 return linkedList; } 
         }
 
-        /**
-         * 初始化前调用
+       /**
+         * Called before init 
          */
         
         interceptor_demo = new TestInterceptor();      
@@ -733,20 +704,23 @@ public class TestInterceptor extends BaseInterceptor {  
 
 ```
 
+
+
+
 ## Error Code
 ```java
 public class MediationMTGErrorCode {
 
 
-    public static String INTERNAL_ERROR = "INTERNAL_ERROR";//网络错误
-    public static String ADAPTER_CONFIGURATION_ERROR = "ADAPTER_CONFIGURATION_ERROR";//配置错误
-    public static String VIDEO_CACHE_ERROR = "VIDEO_CACHE_ERROR";//广告缓存失败
-    public static String NETWORK_NO_FILL = "NETWORK_NO_FILL";//广告无填充
-    public static String ADSOURCE_IS_INVALID = "adsources is invalid";//adsources 无效
-    public static String NO_CONNECTION = "NO_CONNECTION";//无网络连接
-    public static String UNSPECIFIED = "UNSPECIFIED";//未知错误
-    public static String ACTIVITY_IS_NULL= "ACTIVITY_IS_NULL";//Activity为空
-    public static String ADSOURCE_IS_TIMEOUT = "ADSOURCE_IS_TIMEOUT";//广告加载超时
+    public static String INTERNAL_ERROR = "INTERNAL_ERROR";
+    public static String ADAPTER_CONFIGURATION_ERROR = "ADAPTER_CONFIGURATION_ERROR";
+    public static String VIDEO_CACHE_ERROR = "VIDEO_CACHE_ERROR";
+    public static String NETWORK_NO_FILL = "NETWORK_NO_FILL";
+    public static String ADSOURCE_IS_INVALID = "adsources is invalid";
+    public static String NO_CONNECTION = "NO_CONNECTION";
+    public static String UNSPECIFIED = "UNSPECIFIED";
+    public static String ACTIVITY_IS_NULL= "ACTIVITY_IS_NULL";
+    public static String ADSOURCE_IS_TIMEOUT = "ADSOURCE_IS_TIMEOUT";
 
 
 }
@@ -756,6 +730,16 @@ public class MediationMTGErrorCode {
 
 
 
-		 
-		 
+
+
+
+
+
+
+
+​		 
+
+
+
+
 
