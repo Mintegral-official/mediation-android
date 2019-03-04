@@ -1,5 +1,6 @@
 
 # Mintegral聚合集成指南（Android）
+[英文文档](../README.md)
 
 ## 概要
 
@@ -8,22 +9,22 @@
  
 
 ## 配置Mintegral
-### 获取账户信息    
+### 获取账户信息  
 
 **App Key**   
 
 开发者每个账号都有对应的App Key，请求广告时需要用到该参数，它可以从Mintegral开发者后台获取，在**APP Setting -> App Key**界面，可以查看到该账号的App Key，如图所示：  
-![](./ApiKey.png)  
+![](./apikey.png) 
 
 **App Id**        
 
 开发者每创建一个应用后，系统会自动生成App Id，可在**APP Setting -> App Id**界面查看到已创建的应用以及对应的App Id，如图所示：  
-![](./AppId.png)    
+![](./appid.png)    
 
 **Unit Id**       
 
 开发者每创建一个广告位后，系统会自动生成Unit Id，可在**APP Setting -> AD Unit -> AD Unit Id**界面查看到已创建的广告位以及对应的Unit Id，如图所示：  
-![](./UnitId.png)   
+![](./unitid.png)   
 
 ### 获取SDK
 
@@ -92,11 +93,11 @@ mintegral_mtgdownloads.aar<br>
 
 ```xml
     <activity
-        android:name="com.mintegral.msdk.activity.MTGCommonActivity"
-        android:configChanges="keyboard|orientation"
-        android:screenOrientation="portrait"
-        android:exported="true"
-        android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:name="com.mintegral.msdk.activity.MTGCommonActivity"
+            android:configChanges="keyboard|orientation"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
     </activity>
     
     
@@ -139,14 +140,14 @@ mintegral_mtgdownloads.aar<br>
 
 
 ```xml
-	<provider
-            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
-            android:authorities="${applicationId}.mtgFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+	      <provider
+              android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
+              android:authorities="${applicationId}.mtgFileProvider"
+              android:exported="false"
+              android:grantUriPermissions="true">
             <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/mtg_provider_paths"/>
+              android:name="android.support.FILE_PROVIDER_PATHS"
+              android:resource="@xml/mtg_provider_paths"/>
         </provider>
 ```
 
@@ -197,8 +198,8 @@ mintegral_mtgdownloads.aar<br>
 
 ## 配置ironsource
 
-###创建账号
-####[注册](https://platform.ironsrc.com/partners/signup)并[登录](https://platform.ironsrc.com/partners/tour)您的ironSource帐户。     
+### 创建账号
+####  [注册](https://platform.ironsrc.com/partners/signup)并[登录](https://platform.ironsrc.com/partners/tour)您的ironSource帐户。     
 #### 创建App 
 要将您的应用程序添加到ironSource dashboard，请单击**New App** 按钮。
 
@@ -212,14 +213,14 @@ mintegral_mtgdownloads.aar<br>
 
 ![](./ir2.png)
 
-####广告位配置
+####  广告位配置
 记录下您添加应用后得到的**App Key**，初始化SDK时会用到此值。并在此处设置您所需要的广告形式状态，然后单击**Done**。
 ![](https://developers.google.com/admob/images/mediation/ironsource/ad_format_select_android.png)
 
 
-###集成ironsource
+###  集成ironsource
 
-[ironsource集成文档]()参考链接。
+[ironsource集成文档](https://developers.ironsrc.com/ironsource-mobile/android/android-sdk/)参考链接。
 
 #### 导入ironsource文件
 
@@ -236,7 +237,8 @@ repositories {
 
 ```java
 dependencies {
-implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar' 
+
+  implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar' 
 
 }
 ```
@@ -281,11 +283,12 @@ implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar'
 
 
 ### 导入Adapter文件
-点击[这里]()中获取Mediation包，并将其中的全部文档拷贝到您的项目中。
+点击[这里](https://github.com/Mintegral-official/mediation-android/tree/master/mediation/src/main/java/com/mintegral/mediation)中获取Mediation包，并将其中的全部文档拷贝到您的项目中。
 
 ## Interstitial接入
-###初始化
-####创建MediationInterstitialHandler对象
+###  初始化
+####  创建MediationInterstitialHandler对象
+
 ```java
 manager = new MediationInterstitialHandler();
 ```   
@@ -295,18 +298,19 @@ manager = new MediationInterstitialHandler();
 
 ```java
       manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
-     /**
-     * 初始化成功
-     */
+           /**
+           * 初始化成功
+           */
+           
             @Override
             public void onInitSucceed() {
                 Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
                 Log.e("interstitial","onInitSucceed");
             }
             
-     /**
-     * 初始化失败
-     */
+           /**
+           * 初始化失败
+           */
 
             @Override
             public void onInitFailed() {
@@ -316,14 +320,14 @@ manager = new MediationInterstitialHandler();
         });
 ```
 
-####调用init方法 
+#### 调用init方法 
 
 初始化时需要在Map中配置广告id，Adapter路径及超时时间等参数。
    
 示例代码：
 
 ```java
-Map<String,Object> paramsMap = new HashMap<>();
+	Map<String,Object> paramsMap = new HashMap<>();
         //IronSource
         AdSource adSource = new AdSource();
         Map<String,Object> ironsourceMap = new HashMap<>();
@@ -345,57 +349,66 @@ Map<String,Object> paramsMap = new HashMap<>();
         mtgAdSource.setTimeOut(10000);
         paramsMap.put("1",mtgAdSource);
         
- 	     /**
+ 	 /**
          * 初始化
          */
-        manager.init(this,paramsMap);     
+	 manager.init(this,paramsMap);   
+ 
 ```
 
-####设置MediationAdapterInterstitialListener
+#### 设置MediationAdapterInterstitialListener
 ```java
-manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
-		 	 /**
-		     * 加载广告成功
-		     */
+
+      manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitialListener() {
+      
+	    /**
+	     * 加载广告成功
+	     */
+	     
             @Override
             public void loadSucceed() {
                 Toast.makeText(InterstitialActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
             }
-           /**
-		     * 加载广告失败
-		     */
+	    
+            /**
+	     * 加载广告失败
+	     */
 
             @Override
             public void loadFailed(String msg) {
                 Toast.makeText(InterstitialActivity.this,"loadFailed:"+msg,Toast.LENGTH_LONG).show();
-           /**
-		     * 展示广告成功
-		     */
+	    }
+	    
+            /**
+	     * 展示广告成功
+	     */
 
             @Override
             public void showSucceed() {
                 Toast.makeText(InterstitialActivity.this,"showSucceed:",Toast.LENGTH_LONG).show();
             }
             
-		     /**
-		     * 展示广告失败
-		     */
+	     /**
+	     * 展示广告失败
+	     */
 
             @Override
             public void showFailed(String msg) {
                 Toast.makeText(InterstitialActivity.this,"showFailed:"+msg,Toast.LENGTH_LONG).show();
             }
+	    
             /**
-		     * 点击广告
-		     */
+	     * 点击广告
+	     */
 
             @Override
             public void clicked(String msg) {
                 Toast.makeText(InterstitialActivity.this,"clicked:"+msg,Toast.LENGTH_LONG).show();
             }
+	    
             /**
-		     * 关闭广告
-		     */
+	     * 关闭广告
+	     */
 
             @Override
             public void closed() {
@@ -408,13 +421,14 @@ manager.setMediationAdapterInterstitialListener(new MediationAdapterInterstitial
 ironsource要求需要调用该方法。
 
 ```java
-lifecycleListener = manager.getLifecycleListener();
+
+  lifecycleListener = manager.getLifecycleListener();
 ```
 在Activity的生命周期中调用其中方法。     
        
 ```java
 
-	@Override
+    @Override
     protected void onPause() {
         super.onPause();
         if(lifecycleListener != null){
@@ -462,38 +476,39 @@ lifecycleListener = manager.getLifecycleListener();
                  * @param 可置空
                  */
                  
- 				if (mediationInterstitialHandler != null) {
+ 		if (mediationInterstitialHandler != null) {
                     mediationInterstitialHandler.isReady("");
                 }
 ```
 
 
 
-##Rewarded Video接入
+## Rewarded Video接入
 
-###初始化
-####创建一个MediationRewardVideoHandler对象
+### 初始化
+#### 创建一个MediationRewardVideoHandler对象
+
 ```java
-manager = new MediationRewardVideoHandler();
+  	manager = new MediationRewardVideoHandler();
 ```
 
 #### 设置MediationAdapterInitListener 
 需要在初始化前调用
 
 ```java
-      manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
-     /**
-     * 初始化成功
-     */
+      	manager.setMediationAdapterInitListener(new MediationAdapterInitListener() {
+           /**
+           * 初始化成功
+           */
             @Override
             public void onInitSucceed() {
                 Toast.makeText(InterstitialActivity.this,"onInitSucceed",Toast.LENGTH_LONG).show();
                 Log.e("interstitial","onInitSucceed");
             }
             
-     /**
-     * 初始化失败
-     */
+           /**
+           * 初始化失败
+           */
 
             @Override
             public void onInitFailed() {
@@ -502,14 +517,14 @@ manager = new MediationRewardVideoHandler();
             }
         });
 ```
-####调用init方法 
+#### 调用init方法 
 
 
 初始化时需要在Map中配置广告id，Adapter路径及超时时间等参数。         
 示例代码：
 
 ```java
-Map<String,Object> paramsMap = new HashMap<>();
+	Map<String,Object> paramsMap = new HashMap<>();
         //IronSource
         AdSource adSource = new AdSource();
         Map<String,Object> ironsourceMap = new HashMap<>();
@@ -524,77 +539,83 @@ Map<String,Object> paramsMap = new HashMap<>();
         AdSource mtgAdSource = new AdSource();
         map.put(CommonConst.KEY_APPID, "your AppId");
         map.put(CommonConst.KEY_APPKEY, "your AppKey");
-         map.put(CommonConst.KEY_REWARDUNITID, "your unitId");
+        map.put(CommonConst.KEY_REWARDUNITID, "your unitId");
         map.put(CommonConst.KEY_USERID, "your userId");////userId在服务器回调中用到
         map.put(CommonConst.KEY_REWARDID, "your rewardId");//rewardId默认可以传1
         map.put(CommonConst.KEY_MUTE, false);
         mtgAdSource.setLocalParams(map);
-mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
+        mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
         mtgAdSource.setTimeOut(20000);
         paramsMap.put("1",mtgAdSource);
 
- 	     /**
+ 	 /**
          * 初始化
          */ 
-		 manager.init(this,paramsMap);
+	 manager.init(this,paramsMap);
 
 ```
 
-####设置MediationAdapterRewardListener
+#### 设置MediationAdapterRewardListener
 ```java
-manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
-			 /**
-		     * 加载广告成功
-		     */
+
+    manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
+	    /**
+	     * 加载广告成功
+	     */
 
             @Override
             public void loadSucceed() {
                 Toast.makeText(RewardActivity.this,"loadSucceed",Toast.LENGTH_LONG).show();
             }
 
-			   /**
-		     * 加载广告失败
-		     */
+	    /**
+	     * 加载广告失败
+	     */
 
             @Override
             public void loadFailed(String msg) {
                 Toast.makeText(RewardActivity.this,"loadFailed:"+msg,Toast.LENGTH_LONG).show();
             }
-             /**
-		     * 展示广告成功
-		     */
+	    
+            /**
+	     * 展示广告成功
+	     */
 
             @Override
             public void showSucceed() {
                 Toast.makeText(RewardActivity.this,"showSucceed:",Toast.LENGTH_LONG).show();
             }
+	    
             /**
-		     * 展示广告失败
-		     */
+	     * 展示广告失败
+	     */
 
             @Override
             public void showFailed(String msg) {
                 Toast.makeText(RewardActivity.this,"showFailed:"+msg,Toast.LENGTH_LONG).show();
             }
+	    
             /**
-		     * 点击广告
-		     */
+	     * 点击广告
+	     */
 
             @Override
             public void clicked(String msg) {
                 Toast.makeText(RewardActivity.this,"clicked:"+msg,Toast.LENGTH_LONG).show();
             }
+	    
              /**
-		     * 关闭广告
-		     */
+	      * 关闭广告
+	      */
 
             @Override
             public void closed() {
                 Toast.makeText(RewardActivity.this,"closed:",Toast.LENGTH_LONG).show();
             }
-             /**
-		     * 奖励回调
-		     */
+	    
+            /**
+	     * 奖励回调
+	     */
 
 
             @Override
@@ -607,13 +628,13 @@ manager.setMediationAdapterRewardListener(new MediationAdapterRewardListener() {
 ironsource要求需要调用该方法。
 
 ```java
-lifecycleListener = manager.getLifecycleListener();
+   lifecycleListener = manager.getLifecycleListener();
 ```
 在Activity的生命周期中调用其中方法。     
        
 ```java
 
-	@Override
+    @Override
     protected void onPause() {
         super.onPause();
         if(lifecycleListener != null){
@@ -674,10 +695,11 @@ lifecycleListener = manager.getLifecycleListener();
 您可以重写BaseInterceptor，该拦截器的作用是设置SDK请求广告优先级，需要在init之前调用该方法。
 
 ```java
- 	 /**
+    /**
      * 设置拦截器，如果不设置或设置为null，将使用默认
      * @param interceptor
      */
+     
     public void setInterceptor(BaseInterceptor interceptor){
         if (interceptor != null) {
             mInterceptor = interceptor;
@@ -701,7 +723,7 @@ public class TestInterceptor extends BaseInterceptor {  
                 return linkedList; } 
         }
 
-       /**
+        /**
          * 初始化前调用
          */
         
