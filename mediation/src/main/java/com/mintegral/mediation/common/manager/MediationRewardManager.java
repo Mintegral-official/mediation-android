@@ -33,11 +33,74 @@ public class MediationRewardManager extends BaseManager{
     private boolean loadHadResult = false;
     private  Handler handler = new TimerHandler(this) ;
     private String currentLoadParam;
+    private int index;
 
     @Override
     public String getCurrentLoadParam() {
         return currentLoadParam;
     }
+
+    private MediationAdapterRewardListener mediationAdapterRewardListener = new MediationAdapterRewardListener() {
+        @Override
+        public void loadSucceed() {
+            if(handler != null){
+                handler.removeMessages(1);
+            }
+            if(mMediationAdapterRewardListener != null && !loadHadResult){
+                mMediationAdapterRewardListener.loadSucceed();
+                loadHadResult =true;
+
+            }
+        }
+
+        @Override
+        public void loadFailed(String msg) {
+            rewardAdapter.setSDKRewardListener(null);
+            if(handler != null){
+                handler.removeMessages(1);
+            }
+            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
+                loadAndSetTimeOut(currentLoadParam);
+            }else{
+                loadFailedToUser(msg);
+            }
+        }
+
+        @Override
+        public void showSucceed() {
+            if(mMediationAdapterRewardListener != null){
+                mMediationAdapterRewardListener.showSucceed();
+            }
+            index = 0;
+            loopNextAdapter(activityWeakReference.get(),mMediationUnitId);
+        }
+
+        @Override
+        public void showFailed(String msg) {
+            showFailedToUser(msg);
+        }
+
+        @Override
+        public void clicked(String msg) {
+            if(mMediationAdapterRewardListener != null){
+                mMediationAdapterRewardListener.clicked(msg);
+            }
+        }
+
+        @Override
+        public void closed() {
+            if(mMediationAdapterRewardListener != null){
+                mMediationAdapterRewardListener.closed();
+            }
+        }
+
+        @Override
+        public void rewarded(String name, int amount) {
+            if(mMediationAdapterRewardListener != null){
+                mMediationAdapterRewardListener.rewarded(name, amount);
+            }
+        }
+    };
 
     /**
      * 初始化sdk
@@ -61,6 +124,7 @@ public class MediationRewardManager extends BaseManager{
             callInitListener(false);
             return;
         }
+        index = 0;
         rewardAdapter = loopNextAdapter(activity,mediationUnitId);
 
     }
@@ -76,7 +140,8 @@ public class MediationRewardManager extends BaseManager{
 
                 @Override
                 public void onInitFailed() {
-                    if( loopNextAdapter(activity,mediationUnitId) == null){
+                    //失败了，就看下一个优先级
+                    if(loopNextAdapter(activity,mediationUnitId) == null){
                         callInitListener(false);
                     }
                 }
@@ -89,8 +154,10 @@ public class MediationRewardManager extends BaseManager{
 
     private BaseRewardAdapter loopNextAdapter( Activity activity, String mediationUnitId){
         rewardAdapter = null;
-        while (adSources != null && adSources.size() > 0){
-            AdSource adSource = adSources.poll();
+        while (adSources != null && adSources.size() > 0 && index < adSources.size()){
+            AdSource adSource = adSources.get(index);
+            //再来获取的话，就是下一个优先级的
+            index++;
             if(adSource != null){
                 currentAdSource = adSource;
                 rewardAdapter = newInstanceCurrentAdapter(adSource);
@@ -148,64 +215,7 @@ public class MediationRewardManager extends BaseManager{
 
     private void setAdapterRewardListener(){
         if(rewardAdapter != null){
-            rewardAdapter.setSDKRewardListener(new MediationAdapterRewardListener() {
-                @Override
-                public void loadSucceed() {
-                    if(handler != null){
-                        handler.removeMessages(1);
-                    }
-                    if(mMediationAdapterRewardListener != null && !loadHadResult){
-                        mMediationAdapterRewardListener.loadSucceed();
-                        loadHadResult =true;
-
-                    }
-                }
-
-                @Override
-                public void loadFailed(String msg) {
-                    if(handler != null){
-                        handler.removeMessages(1);
-                    }
-                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                        loadAndSetTimeOut(currentLoadParam);
-                    }else{
-                        loadFailedToUser(msg);
-                    }
-                }
-
-                @Override
-                public void showSucceed() {
-                    if(mMediationAdapterRewardListener != null){
-                        mMediationAdapterRewardListener.showSucceed();
-                    }
-                }
-
-                @Override
-                public void showFailed(String msg) {
-                    showFailedToUser(msg);
-                }
-
-                @Override
-                public void clicked(String msg) {
-                    if(mMediationAdapterRewardListener != null){
-                        mMediationAdapterRewardListener.clicked(msg);
-                    }
-                }
-
-                @Override
-                public void closed() {
-                    if(mMediationAdapterRewardListener != null){
-                        mMediationAdapterRewardListener.closed();
-                    }
-                }
-
-                @Override
-                public void rewarded(String name, int amount) {
-                    if(mMediationAdapterRewardListener != null){
-                        mMediationAdapterRewardListener.rewarded(name, amount);
-                    }
-                }
-            });
+            rewardAdapter.setSDKRewardListener(mediationAdapterRewardListener);
         }
     }
 
@@ -308,7 +318,6 @@ public class MediationRewardManager extends BaseManager{
         if(rewardAdapter != null){
             rewardAdapter.setSDKRewardListener(null);
         }
-
         if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
             loadAndSetTimeOut(param);
         }else{

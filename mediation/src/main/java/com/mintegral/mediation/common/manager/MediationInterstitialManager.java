@@ -33,6 +33,7 @@ public class MediationInterstitialManager extends BaseManager{
     private String mMediationUnitId;
     private AdSource currentAdSource;
     private String currentLoadParam;
+    private int index;
 
     @Override
     public String getCurrentLoadParam() {
@@ -75,14 +76,16 @@ public class MediationInterstitialManager extends BaseManager{
            callInitListener(false);
             return;
         }
+        index = 0;
         interstitialAdapter = loopNextAdapter(activity,mediationUnitId);
 
     }
 
     private BaseInterstitialAdapter loopNextAdapter( Activity activity, String mediationUnitId){
         interstitialAdapter = null;
-        while (adSources != null && adSources.size() > 0){
-            AdSource adSource = adSources.poll();
+        while (adSources != null && adSources.size() > 0&& index < adSources.size()){
+            AdSource adSource = adSources.get(index);
+            index++;
             if(adSource != null){
                 currentAdSource = adSource;
                 interstitialAdapter = newInstanceCurrentAdapter(adSource);
@@ -120,7 +123,7 @@ public class MediationInterstitialManager extends BaseManager{
                     if(handler != null){
                         handler.removeMessages(1);
                     }
-
+                    interstitialAdapter.setSDKInterstitial(null);
                     if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
                         loadAndSetTimeOut(currentLoadParam);
                     }else{
@@ -133,6 +136,8 @@ public class MediationInterstitialManager extends BaseManager{
                     if(mMediationAdapterInterstitialListener != null){
                         mMediationAdapterInterstitialListener.showSucceed();
                     }
+                    index = 0;
+                    loopNextAdapter(activityWeakReference.get(),mMediationUnitId);
                 }
 
                 @Override

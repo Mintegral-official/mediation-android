@@ -5,9 +5,7 @@ import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.ironsource.mediationsdk.sdk.InterstitialListener;
-
 import com.mintegral.mediation.common.BaseLifecycleListener;
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.MediationMTGErrorCode;
@@ -17,7 +15,7 @@ import com.mintegral.mediation.common.listener.MediationAdapterInterstitialListe
 
 import java.util.Map;
 
-public class IronInterstitialAdapter extends BaseInterstitialAdapter implements ISDemandOnlyInterstitialListener {
+public class IronInterstitialAdapter extends BaseInterstitialAdapter implements InterstitialListener {
 
     private MediationAdapterInterstitialListener mMediationAdapterInterstitialListener;
     private MediationAdapterInitListener mMediationAdapterInitListener;
@@ -35,7 +33,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     @Override
     public void setSDKInterstitial(MediationAdapterInterstitialListener mediationAdapterInterstitialListener) {
         mMediationAdapterInterstitialListener = mediationAdapterInterstitialListener;
-        IronSource.setISDemandOnlyInterstitialListener(this);
+        IronSource.setInterstitialListener(this);
     }
 
     @Override
@@ -46,7 +44,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
                 //初始化reward video
                 appKey = ob.toString();
                 if (!TextUtils.isEmpty(appKey)) {
-                    IronSource.initISDemandOnly(activity, appKey, IronSource.AD_UNIT.INTERSTITIAL);
+                    IronSource.init(activity, appKey, IronSource.AD_UNIT.INTERSTITIAL);
                     if (mMediationAdapterInitListener != null) {
                         mMediationAdapterInitListener.onInitSucceed();
                     }
@@ -63,10 +61,10 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
     @Override
     public void load(String param) {
-        if (IronSource.isISDemandOnlyInterstitialReady(mInstanceId)) {
-            onInterstitialAdReady(mInstanceId);
+        if (IronSource.isInterstitialReady()) {
+            onInterstitialAdReady();
         } else {
-            IronSource.loadISDemandOnlyInterstitial(mInstanceId);
+            IronSource.loadInterstitial();
         }
     }
 
@@ -74,12 +72,8 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
     @Override
     public void show(String param) {
         try {
-            if (IronSource.isISDemandOnlyInterstitialReady(mInstanceId)) {
-                if (TextUtils.isEmpty(mPlacementName)) {
-                    IronSource.showISDemandOnlyInterstitial(mInstanceId);
-                } else {
-                    IronSource.showISDemandOnlyInterstitial(mInstanceId, mPlacementName);
-                }
+            if (IronSource.isInterstitialReady()) {
+                IronSource.showInterstitial();
             } else {
                 sendToMediationShowFailed(MediationMTGErrorCode.NETWORK_NO_FILL);
 
@@ -93,55 +87,7 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
 
     @Override
     public boolean isReady(String param) {
-        return IronSource.isISDemandOnlyInterstitialReady(mInstanceId);
-    }
-
-    @Override
-    public void onInterstitialAdClicked(String instanceId) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.clicked(instanceId);
-        }
-    }
-
-    @Override
-    public void onInterstitialAdClosed(String instanceId) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.closed();
-        }
-    }
-
-    @Override
-    public void onInterstitialAdLoadFailed(String instanceId,IronSourceError ironSourceError) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.loadFailed(getMIntergralErrorMessage(ironSourceError));
-        }
-    }
-    @Override
-    public void onInterstitialAdReady(String instanceId) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.loadSucceed();
-        }
-    }
-
-    @Override
-    public void onInterstitialAdOpened(String instanceId) {
-
-    }
-
-
-
-    @Override
-    public void onInterstitialAdShowFailed(String instanceId,IronSourceError ironSourceError) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.showFailed(getMIntergralErrorMessage(ironSourceError));
-        }
-    }
-
-    @Override
-    public void onInterstitialAdShowSucceeded(String instanceId) {
-        if(mMediationAdapterInterstitialListener != null){
-            mMediationAdapterInterstitialListener.showSucceed();
-        }
+        return IronSource.isInterstitialReady();
     }
 
 
@@ -195,4 +141,51 @@ public class IronInterstitialAdapter extends BaseInterstitialAdapter implements 
             IronSource.onResume(activity);
         }
     };
+
+    @Override
+    public void onInterstitialAdReady() {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.loadSucceed();
+        }
+    }
+
+    @Override
+    public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.loadFailed(getMIntergralErrorMessage(ironSourceError));
+        }
+    }
+
+    @Override
+    public void onInterstitialAdOpened() {
+
+    }
+
+    @Override
+    public void onInterstitialAdClosed() {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.closed();
+        }
+    }
+
+    @Override
+    public void onInterstitialAdShowSucceeded() {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.showSucceed();
+        }
+    }
+
+    @Override
+    public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.showFailed(getMIntergralErrorMessage(ironSourceError));
+        }
+    }
+
+    @Override
+    public void onInterstitialAdClicked() {
+        if(mMediationAdapterInterstitialListener != null){
+            mMediationAdapterInterstitialListener.clicked(mInstanceId);
+        }
+    }
 }

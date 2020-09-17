@@ -23,6 +23,9 @@ allprojects {
             //ironsource 远程仓库
             url "https://dl.bintray.com/ironsource-mobile/android-sdk"
         }
+        maven {
+            url  "https://dl.bintray.com/mintegral-official/Mintegral_ad_SDK_Android"
+        }
     }
 
 }

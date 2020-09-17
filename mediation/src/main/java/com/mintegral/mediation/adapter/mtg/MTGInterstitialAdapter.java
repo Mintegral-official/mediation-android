@@ -33,6 +33,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
     private String appId;
     private String appKey;
     private String mInterstitialUnitId;
+    private String mPlacementId;
     private MTGInterstitialVideoHandler mMTGInterstitalVideoHandler;
     private MediationAdapterInitListener mMediationAdapterInitListener;
     private MediationAdapterInterstitialListener mMediationAdapterInterstitialListener;
@@ -56,9 +57,10 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
         }
 
         isMute = (boolean) localExtras.get(CommonConst.KEY_MUTE);
-        appId = (String) localExtras.get(CommonConst.KEY_APPID);
-        appKey = (String) localExtras.get(CommonConst.KEY_APPKEY);
-        mInterstitialUnitId = (String)localExtras.get(CommonConst.KEY_INTERSTITIALUNITID);
+        appId = (String) localExtras.get(CommonConst.KEY_APP_ID);
+        appKey = (String) localExtras.get(CommonConst.KEY_APP_KEY);
+        mInterstitialUnitId = (String)localExtras.get(CommonConst.KEY_INTERSTITIAL_UNIT_ID);
+        mPlacementId = (String)localExtras.get(CommonConst.KEY_PLACEMENT_ID);
 
         if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(appKey) || TextUtils.isEmpty(mInterstitialUnitId)) {
             Log.e(TAG, "appId/appKey/interstitialUnitId cannot be null.");
@@ -72,7 +74,7 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
         Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey);
         sdk.init(map, activity.getApplication());
 
-        mMTGInterstitalVideoHandler = new MTGInterstitialVideoHandler(activity, mInterstitialUnitId);
+        mMTGInterstitalVideoHandler = new MTGInterstitialVideoHandler(activity,mPlacementId, mInterstitialUnitId);
         if (mMediationAdapterInitListener != null) {
             mMediationAdapterInitListener.onInitSucceed();
         }
@@ -129,19 +131,22 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
 
     @Override
     public void setSDKInterstitial(MediationAdapterInterstitialListener mediationAdapterInterstitialListener) {
-        if (mediationAdapterInterstitialListener == null) {
-            Log.e(TAG, "MediationAdapterInterstitialListener cannot be null.");
-            return;
-        }
+//        if (mediationAdapterInterstitialListener == null) {
+//            Log.e(TAG, "MediationAdapterInterstitialListener cannot be null.");
+//            return;
+//        }
         mMediationAdapterInterstitialListener = mediationAdapterInterstitialListener;
     }
 
     private InterstitialVideoListener mInterstitialVideoListener = new InterstitialVideoListener() {
-        @Override
-        public void onLoadSuccess(String s) {}
 
         @Override
-        public void onVideoLoadSuccess(String s) {
+        public void onLoadSuccess(String s, String s1) {
+
+        }
+
+        @Override
+        public void onVideoLoadSuccess(String s, String s1) {
             loadSucessTime = System.currentTimeMillis();
             isReady = true;
             if (mMediationAdapterInterstitialListener != null) {
@@ -180,10 +185,26 @@ public class MTGInterstitialAdapter extends BaseInterstitialAdapter {
         }
 
         @Override
-        public void onVideoAdClicked(String s) {
+        public void onVideoAdClicked(String s, String s1) {
             if (mMediationAdapterInterstitialListener != null) {
                 mMediationAdapterInterstitialListener.clicked(s);
             }
         }
+
+        @Override
+        public void onVideoComplete(String s, String s1) {
+
+        }
+
+        @Override
+        public void onAdCloseWithIVReward(boolean b, int i) {
+
+        }
+
+        @Override
+        public void onEndcardShow(String s, String s1) {
+
+        }
+
     };
 }

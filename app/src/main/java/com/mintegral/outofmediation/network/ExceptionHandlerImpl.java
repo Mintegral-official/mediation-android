@@ -21,10 +21,10 @@ public class ExceptionHandlerImpl implements IExceptionHandler {
                 case 401:
                     break;
 
-                case CommonConst.KEY_REQUESTERROR:
+                case CommonConst.KEY_REQUEST_ERROR:
                     break;
 
-                case CommonConst.KEY_RESPONSEERROR:
+                case CommonConst.KEY_RESPONSE_ERROR:
                     break;
             }
         }

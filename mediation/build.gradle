@@ -34,10 +34,15 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //ironsource的sdk依赖
-    implementation 'com.ironsource.sdk:mediationsdk:6.8.1@jar'
+    implementation 'com.ironsource.sdk:mediationsdk:6.15.0.1@jar'
 
-    //MTG NEED
-    implementation ('com.google.android.gms:play-services-ads:10.0.1'){
-        exclude group: 'com.android.support', module: 'support-v4'
-    }
+    //mtg依赖包
+    implementation 'com.mintegral.msdk:videojs:10.6.51'
+    implementation 'com.mintegral.msdk:mtgjscommon:10.6.51'
+    implementation 'com.mintegral.msdk:playercommon:10.6.51'
+    implementation 'com.mintegral.msdk:reward:10.6.51'
+    implementation 'com.mintegral.msdk:videocommon:10.6.51'
+    implementation 'com.mintegral.msdk:common:10.6.51'
+    implementation 'com.mintegral.msdk:interstitialvideo:10.6.51'
+    implementation 'com.mintegral.msdk:mtgbanner:10.6.51'
 }

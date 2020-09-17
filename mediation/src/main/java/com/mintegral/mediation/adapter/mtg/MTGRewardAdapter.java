@@ -34,6 +34,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     private String mUserId;
     private String mRewardId;
     private String mRewardUnitId;
+    private String mPlacementId;
     private boolean isMute = false;
     private MediationAdapterInitListener mMediationAdapterInitListener;
     private MediationAdapterRewardListener mMediationAdapterRewardListener;
@@ -56,11 +57,12 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
             return;
         }
 
-        appId = (String) localExtras.get(CommonConst.KEY_APPID);
-        appKey = (String) localExtras.get(CommonConst.KEY_APPKEY);
-        mUserId = (String) localExtras.get(CommonConst.KEY_USERID);
-        mRewardId = (String) localExtras.get(CommonConst.KEY_REWARDID);
-        mRewardUnitId = (String)localExtras.get(CommonConst.KEY_REWARDUNITID);
+        appId = (String) localExtras.get(CommonConst.KEY_APP_ID);
+        appKey = (String) localExtras.get(CommonConst.KEY_APP_KEY);
+        mUserId = (String) localExtras.get(CommonConst.KEY_USER_ID);
+        mRewardId = (String) localExtras.get(CommonConst.KEY_REWARD_ID);
+        mRewardUnitId = (String)localExtras.get(CommonConst.KEY_REWARD_UNIT_ID);
+        mPlacementId = (String)localExtras.get(CommonConst.KEY_PLACEMENT_ID);
 
         if (TextUtils.isEmpty(appId) || TextUtils.isEmpty(appKey) || TextUtils.isEmpty(mRewardId) || TextUtils.isEmpty(mRewardUnitId)) {
             Log.e(TAG, "appId/appKey/rewarId/rewardUnitId cannot be null.");
@@ -72,9 +74,9 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
 
         MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
         Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey);
-        sdk.init(map, activity.getApplication());
+        sdk.init(map, activity);
 
-        mMTGRewardVideoHandler = new MTGRewardVideoHandler(activity, mRewardUnitId);
+        mMTGRewardVideoHandler = new MTGRewardVideoHandler(activity,mPlacementId, mRewardUnitId);
         if (mMediationAdapterInitListener != null) {
             mMediationAdapterInitListener.onInitSucceed();
         }
@@ -82,10 +84,6 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
 
     @Override
     public void setSDKRewardListener(MediationAdapterRewardListener mediationAdapterRewardListener) {
-        if (mediationAdapterRewardListener == null) {
-            Log.e(TAG, "MediationAdapterRewardListener cannot be null.");
-            return;
-        }
         mMediationAdapterRewardListener = mediationAdapterRewardListener;
     }
 
@@ -133,14 +131,17 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     }
 
     private RewardVideoListener mRewardVideoListener = new RewardVideoListener() {
-        @Override
-        public void onLoadSuccess(String s) {}
 
         @Override
-        public void onVideoLoadSuccess(String s) {
+        public void onVideoLoadSuccess(String s, String s1) {
             if (mMediationAdapterRewardListener != null) {
                 mMediationAdapterRewardListener.loadSucceed();
             }
+        }
+
+        @Override
+        public void onLoadSuccess(String s, String s1) {
+
         }
 
         @Override
@@ -175,10 +176,21 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
         }
 
         @Override
-        public void onVideoAdClicked(String s) {
+        public void onVideoAdClicked(String s, String s1) {
             if (mMediationAdapterRewardListener != null) {
                 mMediationAdapterRewardListener.clicked(s);
             }
         }
+
+        @Override
+        public void onVideoComplete(String s, String s1) {
+
+        }
+
+        @Override
+        public void onEndcardShow(String s, String s1) {
+
+        }
+
     };
 }

@@ -35,7 +35,7 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
     protected T doInBackground(BaseRequest<T>... requests) {
         if (isCancelled() || requests == null || requests.length == 0) {
             if(mNetCallback != null) {
-                mNetCallback.onFail(new NetworkException(CommonConst.KEY_REQUESTERROR, CommonConst.REQUESTERROR_CONTENT));
+                mNetCallback.onFail(new NetworkException(CommonConst.KEY_REQUEST_ERROR, CommonConst.REQUEST_ERROR_CONTENT));
             }
             return null;
         }
@@ -77,7 +77,7 @@ public class NetworkUtil<T> extends AsyncTask<BaseRequest<T>, Void, T> {
             if (response != null) {
                 mNetCallback.onSuccess(response);
             } else {
-                mNetCallback.onFail(new NetworkException(CommonConst.KEY_RESPONSEERROR, CommonConst.RESPONSEERROR_CONTENT));
+                mNetCallback.onFail(new NetworkException(CommonConst.KEY_RESPONSE_ERROR, CommonConst.RESPONSE_ERROR_CONTENT));
             }
         }
     }
