@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    private Button rewardBtn,interstitialBtn;
+    private Button rewardBtn,interstitialBtn,bannerBtn;
 
 
     @Override
@@ -23,11 +23,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void initView(){
         rewardBtn = findViewById(R.id.main_reward);
         interstitialBtn = findViewById(R.id.main_interstitial);
+        bannerBtn = findViewById(R.id.main_banner);
     }
 
     private void initListener(){
         setViewListener(rewardBtn);
         setViewListener(interstitialBtn);
+        setViewListener(bannerBtn);
 
     }
 
@@ -42,6 +44,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.main_interstitial:
                 Intent interstitialIntent = new Intent(MainActivity.this, InterstitialActivity.class);
                 startActivity(interstitialIntent);
+                break;
+            case R.id.main_banner:
+                Intent bannerIntent = new Intent(MainActivity.this, BannerActivity.class);
+                startActivity(bannerIntent);
                 break;
             default:
                 break;

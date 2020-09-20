@@ -1,6 +1,7 @@
 package com.mintegral.mediation.out.handler;
 
 import android.app.Activity;
+import android.view.ViewGroup;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
@@ -41,6 +42,8 @@ public abstract class BaseHandler {
      * it will show ads
      */
     public abstract void show(String param);
+
+    public void showBanner(String param, ViewGroup container){};
 
     /**
      * get adapter's lifecycleListener

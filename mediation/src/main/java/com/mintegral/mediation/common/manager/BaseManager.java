@@ -1,6 +1,7 @@
 package com.mintegral.mediation.common.manager;
 
 import android.app.Activity;
+import android.view.ViewGroup;
 
 import com.mintegral.mediation.common.LifecycleListener;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
@@ -15,6 +16,7 @@ public abstract class BaseManager {
     abstract void load(String param);
     abstract boolean isReady(String param);
     abstract void show(String param);
+    public void showBanner(String param, ViewGroup container){};
     abstract LifecycleListener getLifecycleListener();
     public abstract void loadTimeout(String param);
     public abstract boolean isLoadHadResult();
