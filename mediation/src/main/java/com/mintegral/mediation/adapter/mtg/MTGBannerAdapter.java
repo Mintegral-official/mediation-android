@@ -146,11 +146,17 @@ public class MTGBannerAdapter extends BaseBannerAdapter {
                 mBannerSizeW = (Integer) wObj;
             }
         }
+
+
         mtgBannerView = new MTGBannerView(activity);
         mtgBannerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
         mtgBannerView.init(new BannerSize(mBannerSizeType,mBannerSizeW,mBannerSizeH),mPlacementId,mUnitId);
         mtgBannerView.setRefreshTime(mBannerRefreshTime);
         mtgBannerView.setBannerAdListener(bannerAdListener);
+        Object allowSkip = localExtras.get(CommonConst.KEY_BANNER_ALLOW_SKIP);
+        if(allowSkip instanceof Boolean){
+            mtgBannerView.setAllowShowCloseBtn((boolean)allowSkip);
+        }
         if (mMediationAdapterInitListener != null) {
             mMediationAdapterInitListener.onInitSucceed();
         }

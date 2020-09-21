@@ -73,9 +73,10 @@ public class BannerActivity extends Activity implements View.OnClickListener {
         map.put(CommonConst.KEY_BANNER_UNIT_ID, "146879");
         map.put(CommonConst.KEY_BANNER_REFRESH_TIME,10);
         map.put(CommonConst.KEY_BANNER_SIZE_TYPE,1);
+        map.put(CommonConst.KEY_BANNER_ALLOW_SKIP,false);
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGBannerAdapter");
-        mtgAdSource.setTimeOut(20);
+        mtgAdSource.setTimeOut(20000);
         paramsMap.put("1",mtgAdSource);
 
 

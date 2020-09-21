@@ -17,6 +17,7 @@ public class CommonConst {
     public static final String KEY_BANNER_SIZE_W = "bannerSizeW";
     public static final String KEY_BANNER_SIZE_H = "bannerSizeH";
     public static final String KEY_BANNER_REFRESH_TIME= "bannerRefreshTime";
+    public static final String KEY_BANNER_ALLOW_SKIP = "bannerAllowSkip";
 
     public static final String KEY_APP_ID = "appId";
     public static final String KEY_APP_KEY = "appKey";
