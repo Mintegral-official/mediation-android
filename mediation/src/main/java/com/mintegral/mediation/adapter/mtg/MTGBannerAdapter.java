@@ -83,7 +83,9 @@ public class MTGBannerAdapter extends BaseBannerAdapter {
 
         @Override
         public void onCloseBanner() {
-
+            if(mMediationAdapterBannerListener != null){
+                mMediationAdapterBannerListener.closed();
+            }
         }
     };
 
