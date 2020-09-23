@@ -67,11 +67,11 @@ public class RewardActivity extends Activity implements View.OnClickListener {
         //MTG
         Map<String,Object> map = new HashMap<>();
         AdSource mtgAdSource = new AdSource();
-        map.put(CommonConst.KEY_APP_ID, "92762");
-        map.put(CommonConst.KEY_APP_KEY, "936dcbdd57fe235fd7cf61c2e93da3c4");
+        map.put(CommonConst.KEY_APP_ID, "118690");
+        map.put(CommonConst.KEY_APP_KEY, "7c22942b749fe6a6e361b675e96b3ee9");
         map.put(CommonConst.KEY_USER_ID, "123");
         map.put(CommonConst.KEY_REWARD_ID, "12817");
-        map.put(CommonConst.KEY_REWARD_UNIT_ID, "21310");
+        map.put(CommonConst.KEY_REWARD_UNIT_ID, "237149");
         map.put(CommonConst.KEY_MUTE, false);
         mtgAdSource.setLocalParams(map);
         mtgAdSource.setTargetClass("com.mintegral.mediation.adapter.mtg.MTGRewardAdapter");
