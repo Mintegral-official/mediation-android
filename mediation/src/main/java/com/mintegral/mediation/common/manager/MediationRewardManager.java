@@ -260,6 +260,7 @@ public class MediationRewardManager extends BaseManager{
             return;
         }
         if(rewardAdapter != null ){
+            setAdapterRewardListener();
             rewardAdapter.show(param);
         }else{
             showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
@@ -328,6 +329,7 @@ public class MediationRewardManager extends BaseManager{
 
     private void loadAndSetTimeOut(String param){
         if (rewardAdapter != null) {
+            setAdapterRewardListener();
             rewardAdapter.load(param);
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());

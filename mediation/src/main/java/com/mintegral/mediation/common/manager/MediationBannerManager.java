@@ -261,6 +261,7 @@ public class MediationBannerManager extends BaseManager{
             return;
         }
         if(bannerAdapter != null ){
+            setAdapterBannerListener();
             bannerAdapter.showBanner(container);
         }else{
             showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
@@ -328,6 +329,7 @@ public class MediationBannerManager extends BaseManager{
 
     private void loadAndSetTimeOut(String param){
         if (bannerAdapter != null) {
+            setAdapterBannerListener();
             bannerAdapter.load(param);
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());

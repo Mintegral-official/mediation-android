@@ -26,6 +26,9 @@ public class MediationInterstitialManager extends BaseManager{
 
     private BaseInterceptor mInterceptor = new DefaultInterstitialInterceptor();
     private LinkedList<AdSource> adSources;
+    /**
+     * 外部传入的监听，用于对外回调数据
+     */
     private MediationAdapterInterstitialListener mMediationAdapterInterstitialListener;
     private MediationAdapterInitListener mMediationAdapterInitListener;
     private BaseInterstitialAdapter interstitialAdapter;
@@ -34,6 +37,65 @@ public class MediationInterstitialManager extends BaseManager{
     private AdSource currentAdSource;
     private String currentLoadParam;
     private int index;
+    /**
+     * 内部使用，在从adapter返回的时候，可以做一些操作
+     */
+    private MediationAdapterInterstitialListener mediationAdapterInterstitialListener = new MediationAdapterInterstitialListener() {
+
+        @Override
+        public void loadSucceed() {
+
+            if(handler != null){
+                handler.removeMessages(1);
+            }
+            if(mMediationAdapterInterstitialListener != null && !loadHadResult){
+                mMediationAdapterInterstitialListener.loadSucceed();
+                loadHadResult = true;
+            }
+        }
+
+        @Override
+        public void loadFailed(String msg) {
+            if(handler != null){
+                handler.removeMessages(1);
+            }
+            interstitialAdapter.setSDKInterstitial(null);
+            if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
+                loadAndSetTimeOut(currentLoadParam);
+            }else{
+                loadFailedToUser(msg);
+            }
+        }
+
+        @Override
+        public void showSucceed() {
+            if(mMediationAdapterInterstitialListener != null){
+                mMediationAdapterInterstitialListener.showSucceed();
+            }
+            index = 0;
+            loopNextAdapter(activityWeakReference.get(),mMediationUnitId);
+        }
+
+        @Override
+        public void showFailed(String msg) {
+            showFailedToUser(msg);
+        }
+
+        @Override
+        public void clicked(String msg) {
+            if(mMediationAdapterInterstitialListener != null){
+                mMediationAdapterInterstitialListener.clicked(msg);
+            }
+        }
+
+        @Override
+        public void closed() {
+            if(mMediationAdapterInterstitialListener != null){
+                mMediationAdapterInterstitialListener.closed();
+            }
+        }
+
+    };
 
     @Override
     public String getCurrentLoadParam() {
@@ -102,64 +164,12 @@ public class MediationInterstitialManager extends BaseManager{
         return interstitialAdapter;
     }
 
+    /**
+     * 对adapter设置监听
+     */
     private void setAdapterInterstitial(){
         if(interstitialAdapter != null){
-            interstitialAdapter.setSDKInterstitial(new MediationAdapterInterstitialListener() {
-
-                @Override
-                public void loadSucceed() {
-
-                    if(handler != null){
-                        handler.removeMessages(1);
-                    }
-                    if(mMediationAdapterInterstitialListener != null && !loadHadResult){
-                        mMediationAdapterInterstitialListener.loadSucceed();
-                        loadHadResult = true;
-                    }
-                }
-
-                @Override
-                public void loadFailed(String msg) {
-                    if(handler != null){
-                        handler.removeMessages(1);
-                    }
-                    interstitialAdapter.setSDKInterstitial(null);
-                    if((loopNextAdapter(activityWeakReference.get(),mMediationUnitId))!= null){
-                        loadAndSetTimeOut(currentLoadParam);
-                    }else{
-                        loadFailedToUser(msg);
-                    }
-                }
-
-                @Override
-                public void showSucceed() {
-                    if(mMediationAdapterInterstitialListener != null){
-                        mMediationAdapterInterstitialListener.showSucceed();
-                    }
-                    index = 0;
-                    loopNextAdapter(activityWeakReference.get(),mMediationUnitId);
-                }
-
-                @Override
-                public void showFailed(String msg) {
-                    showFailedToUser(msg);
-                }
-
-                @Override
-                public void clicked(String msg) {
-                    if(mMediationAdapterInterstitialListener != null){
-                        mMediationAdapterInterstitialListener.clicked(msg);
-                    }
-                }
-
-                @Override
-                public void closed() {
-                    if(mMediationAdapterInterstitialListener != null){
-                        mMediationAdapterInterstitialListener.closed();
-                    }
-                }
-
-            });
+            interstitialAdapter.setSDKInterstitial(mediationAdapterInterstitialListener);
         }
     }
 
@@ -266,6 +276,7 @@ public class MediationInterstitialManager extends BaseManager{
             return;
         }
         if(interstitialAdapter != null ){
+            setAdapterInterstitial();
             interstitialAdapter.show(param);
         }else{
             showFailedToUser(MediationMTGErrorCode.ADSOURCE_IS_INVALID);
@@ -318,6 +329,7 @@ public class MediationInterstitialManager extends BaseManager{
 
     private void loadAndSetTimeOut(String param){
         if (interstitialAdapter != null) {
+            setAdapterInterstitial();
             interstitialAdapter.load(param);
             if (currentAdSource != null) {
                 handler.sendEmptyMessageDelayed(1,currentAdSource.getTimeOut());
