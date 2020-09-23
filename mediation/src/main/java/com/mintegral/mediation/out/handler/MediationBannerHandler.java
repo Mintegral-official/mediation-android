@@ -8,9 +8,7 @@ import com.mintegral.mediation.common.MediationMTGErrorCode;
 import com.mintegral.mediation.common.interceptor.BaseInterceptor;
 import com.mintegral.mediation.common.listener.MediationAdapterBannerListener;
 import com.mintegral.mediation.common.listener.MediationAdapterInitListener;
-import com.mintegral.mediation.common.listener.MediationAdapterRewardListener;
 import com.mintegral.mediation.common.manager.MediationBannerManager;
-import com.mintegral.mediation.common.manager.MediationRewardManager;
 
 import java.util.Map;
 

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BannerActivity extends Activity implements View.OnClickListener {
+    private String TAG = getClass().getSimpleName();
 
     private Button showBtn, loadBtn, isReadyBtn, initBtn;
     private RelativeLayout adContainer;
@@ -43,13 +44,13 @@ public class BannerActivity extends Activity implements View.OnClickListener {
             @Override
             public void onInitSucceed() {
                 Toast.makeText(BannerActivity.this, "onInitSucceed", Toast.LENGTH_LONG).show();
-                Log.e("reward", "onInitSucceed");
+                Log.e(TAG, "onInitSucceed");
             }
 
             @Override
             public void onInitFailed() {
                 Toast.makeText(BannerActivity.this, "onInitFailed", Toast.LENGTH_LONG).show();
-                Log.e("reward", "onInitFailed");
+                Log.e(TAG, "onInitFailed");
             }
         });
         Map<String, Object> paramsMap = new HashMap<>();

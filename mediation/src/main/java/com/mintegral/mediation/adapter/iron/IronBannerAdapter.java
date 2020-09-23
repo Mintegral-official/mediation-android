@@ -88,7 +88,7 @@ public class IronBannerAdapter extends BaseBannerAdapter {
             weakReference = new WeakReference<>(activity);
             Object ob = localExtras.get("local");
             if(ob instanceof String){
-                //初始化reward video
+                //初始化banner
                 mAppKey = ob.toString();
                 if (!TextUtils.isEmpty(mAppKey)) {
                     IronSource.init(activity, mAppKey, IronSource.AD_UNIT.BANNER);
