@@ -100,6 +100,7 @@ public class MTGRewardAdapter extends BaseRewardAdapter {
     @Override
     public void show(String param) {
         if (mMTGRewardVideoHandler != null && mMTGRewardVideoHandler.isReady()) {
+            mMTGRewardVideoHandler.setRewardVideoListener(mRewardVideoListener);
             if (TextUtils.isEmpty(mUserId)) {
                 mMTGRewardVideoHandler.show(mRewardId);
             } else {
